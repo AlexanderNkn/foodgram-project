@@ -23,10 +23,12 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = "h38--&)p0hj*o4yv7m!c%a+*gw401@gu-qc-^)n&#8v%98^u4a"
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['example.com']
 
+# custom User model
+AUTH_USER_MODEL = "users.User"
 
 # Application definition
 
@@ -37,6 +39,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
+    "users",
+    "api",
+    "main",
 ]
 
 MIDDLEWARE = [
