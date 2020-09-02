@@ -44,15 +44,16 @@ AUTH_USER_MODEL = "users.User"
 # Application definition
 
 INSTALLED_APPS = [
+    "users",
+    "api",
+    "main",
     "django.contrib.admin",
     "django.contrib.auth",
     "django.contrib.contenttypes",
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users",
-    "api",
-    "main",
+    'sorl.thumbnail',
 ]
 
 MIDDLEWARE = [
