@@ -1,9 +1,11 @@
-from .base import *  # noqa
+from .base import * # noqa
 
 
 DEBUG = True
 
 ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+
+STATICFILES_DIR = os.path.join(BASE_DIR, 'static') # noqa
 
 # Logging
 if DEBUG:
