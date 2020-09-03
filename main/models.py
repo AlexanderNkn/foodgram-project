@@ -1,5 +1,8 @@
+import itertools
+
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.text import slugify
 
 from .validators import validate_file_size
 
@@ -8,7 +11,7 @@ User = get_user_model()
 
 class Recipe(models.Model):
     """
-    Модель рецептов пользователя
+    Модель рецептов пользователя.
     """
 
     author = models.ForeignKey(
@@ -28,7 +31,9 @@ class Recipe(models.Model):
         validators=[validate_file_size],
         verbose_name="изображение",
     )
-    slug = models.SlugField("уникальное имя", max_length=256)
+    slug = models.SlugField(
+        "уникальное имя", default="", editable=False, max_length=32
+    )
     tag = models.ManyToManyField(
         "Tag", related_name="recipe_tag", verbose_name="тег"
     )
@@ -38,6 +43,24 @@ class Recipe(models.Model):
         through="IngredientAmount",
         verbose_name="ингредиент",
     )
+
+    def _generate_slug(self):
+        # функция создает уникальный slug из названия рецепта
+        max_length = self._meta.get_field("slug").max_length
+        value = self.title
+        slug_candidate = slug_original = slugify(value, allow_unicode=True)[:max_length] # noqa
+        for i in itertools.count(1):
+            if not Recipe.objects.filter(slug=slug_candidate).exists():
+                break
+            slug_candidate = "{}-{}".format(slug_original, i)
+
+        self.slug = slug_candidate
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self._generate_slug()
+
+        super().save(*args, **kwargs)
 
     class Meta:
         ordering = ("-pub_date",)
@@ -49,7 +72,7 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    """Модель ингредиентов в рецепте"""
+    """Модель ингредиентов в рецепте."""
 
     title = models.CharField("название ингредиента", max_length=128)
     dimension = models.CharField("единицы измерения", max_length=16)
@@ -64,16 +87,16 @@ class Ingredient(models.Model):
 
 class IngredientAmount(models.Model):
     """Промежуточная модель между моделями ингредиентов и рецептов,
-    показывает количество ингредиента в конкретном рецепте
+    показывает количество ингредиента в конкретном рецепте.
     """
 
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, verbose_name="ингредиент")
-    recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, verbose_name="рецепт")
-    amount = models.DecimalField(
-        "количество", max_digits=6, decimal_places=1
+        Ingredient, on_delete=models.CASCADE, verbose_name="ингредиент"
     )
+    recipe = models.ForeignKey(
+        Recipe, on_delete=models.CASCADE, verbose_name="рецепт"
+    )
+    amount = models.DecimalField("количество", max_digits=6, decimal_places=1)
 
     class Meta:
         verbose_name = "кол-во ингредиента"
