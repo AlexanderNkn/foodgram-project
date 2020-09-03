@@ -21,7 +21,7 @@ class Recipe(models.Model):
         verbose_name="автор рецепта",
     )
     title = models.CharField("название рецепта", max_length=256)
-    time = models.PositiveSmallIntegerField("время приготовления")
+    duration = models.PositiveSmallIntegerField("время приготовления")
     text = models.TextField("текст рецепта")
     pub_date = models.DateTimeField(
         "дата публикации", auto_now_add=True, db_index=True
@@ -34,9 +34,9 @@ class Recipe(models.Model):
     slug = models.SlugField(
         "уникальное имя", default="", editable=False, max_length=32
     )
-    tag = models.ManyToManyField(
-        "Tag", related_name="recipe_tag", verbose_name="тег"
-    )
+    #    tag = models.ManyToManyField(
+    #        "Tag", related_name="recipe_tag", verbose_name="тег"
+    #    )
     ingredient = models.ManyToManyField(
         "Ingredient",
         related_name="recipe_ingredient",
@@ -45,10 +45,12 @@ class Recipe(models.Model):
     )
 
     def _generate_slug(self):
-        # функция создает уникальный slug из названия рецепта
+        # функция создает уникальный slug из названия рецепта(на кириллице)
         max_length = self._meta.get_field("slug").max_length
         value = self.title
-        slug_candidate = slug_original = slugify(value, allow_unicode=True)[:max_length] # noqa
+        slug_candidate = slug_original = slugify(value, allow_unicode=True)[
+            :max_length
+        ]  # noqa
         for i in itertools.count(1):
             if not Recipe.objects.filter(slug=slug_candidate).exists():
                 break
@@ -74,15 +76,19 @@ class Recipe(models.Model):
 class Ingredient(models.Model):
     """Модель ингредиентов в рецепте."""
 
-    title = models.CharField("название ингредиента", max_length=128)
+    title = models.CharField(
+        "название ингредиента", max_length=128, db_index=True
+    )
     dimension = models.CharField("единицы измерения", max_length=16)
 
     class Meta:
+        unique_together = [["title", "dimension"]]
         verbose_name = "ингредиент"
         verbose_name_plural = "ингредиенты"
+        ordering = ("title",)
 
     def __str__(self):
-        return self.title
+        return f"{self.title}, {self.dimension}"
 
 
 class IngredientAmount(models.Model):
@@ -99,21 +105,31 @@ class IngredientAmount(models.Model):
     amount = models.DecimalField("количество", max_digits=6, decimal_places=1)
 
     class Meta:
-        verbose_name = "кол-во ингредиента"
+        verbose_name = "ингредиент"
         verbose_name_plural = "кол-во ингредиентов"
+
+    def __str__(self):
+        return f"Из рецепта '{self.recipe}'"
 
 
 class Tag(models.Model):
     """Модель тегов"""
 
     TAG_CHOICES = (
-        ("b", "Завтрак"),
-        ("d", "Обед"),
-        ("s", "Ужин"),
+        ("Завтрак", "Завтрак"),
+        ("Обед", "Обед"),
+        ("Ужин", "Ужин"),
     )
-    title = models.CharField("тег", max_length=1, choices=TAG_CHOICES)
+    title = models.CharField("тег", max_length=10, choices=TAG_CHOICES)
+    recipe = recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        verbose_name="рецепт",
+        related_name="recipe_tag",
+    )
 
     class Meta:
+        unique_together = [["title", "recipe"]]
         verbose_name = "тег"
         verbose_name_plural = "теги"
 
