@@ -130,3 +130,9 @@ dmypy.json
 
 # vscode settings
 .vscode
+
+# media files
+media/
+
+# migrations
+migrations/
