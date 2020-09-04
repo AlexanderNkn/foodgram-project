@@ -44,6 +44,11 @@ class Recipe(models.Model):
         verbose_name="ингредиент",
     )
 
+    class Meta:
+        ordering = ("-pub_date",)
+        verbose_name = "рецепт"
+        verbose_name_plural = "рецепты"
+
     def _generate_slug(self):
         # функция создает уникальный slug из названия рецепта(на кириллице)
         max_length = self._meta.get_field("slug").max_length
@@ -63,11 +68,6 @@ class Recipe(models.Model):
             self._generate_slug()
 
         super().save(*args, **kwargs)
-
-    class Meta:
-        ordering = ("-pub_date",)
-        verbose_name = "рецепт"
-        verbose_name_plural = "рецепты"
 
     def __str__(self):
         return self.title

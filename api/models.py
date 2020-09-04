@@ -1,3 +1,85 @@
-from django.db import models # noqa
+from django.contrib.auth import get_user_model
+from django.db import models
 
-# Create your models here.
+from main.models import Recipe
+
+User = get_user_model()
+
+
+class Favorite(models.Model):
+    """
+    Класс добавляет понравивишиеся рецепты в избранное.
+    """
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="favorits",
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="recipe_favorite",
+        verbose_name="рецепт в избранном",
+    )
+
+    class Meta:
+        unique_together = [["user", "recipe"]]
+        verbose_name = "избранный рецепт"
+        verbose_name_plural = "избранные рецепты"
+
+    def __str__(self):
+        return f"{self.user.username} добавил в избранное {self.recipe.title}"
+
+
+class Subscribe(models.Model):
+    """
+    Класс создает подписку на понравившегося автора.
+    """
+
+    author = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="following",
+        verbose_name="на него подписался"
+    )
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="follower",
+        verbose_name="он подписался на"
+    )
+
+    class Meta:
+        unique_together = [["user", "author"]]
+        verbose_name = "подписка"
+        verbose_name_plural = "подписки"
+
+    def __str__(self):
+        return f"{self.user.username} подписался на {self.author.username}"
+
+
+class Purchase(models.Model):
+    """
+    Класс собирает выбранные рецепты для последующего
+    формирования списка ингериентов для покупки.
+    """
+
+    user = models.ForeignKey(
+        User,
+        on_delete=models.CASCADE,
+        related_name="purchases",
+    )
+    recipe = models.ForeignKey(
+        Recipe,
+        on_delete=models.CASCADE,
+        related_name="recipe_purchase",
+        verbose_name="рецепт в покупках",
+    )
+
+    class Meta:
+        unique_together = [["user", "recipe"]]
+        verbose_name = "рецепт в списке покупок"
+        verbose_name_plural = "рецепты в списке покупок"
+
+    def __str__(self):
+        return f"{self.user.username} добавил в покупки {self.recipe.title}"
