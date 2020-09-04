@@ -19,7 +19,10 @@ class TagInline(admin.TabularInline):
 @admin.register(Recipe)
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientAmountInline, TagInline)
-    list_display = ("id", "author", "title", "duration", "image", "get_tag")
+    list_display = (
+        "id", "author", "title", "duration",
+        "image", "get_tag", "get_favorite",
+    )
     list_filter = ("author", "title", "recipe_tag__title", )
     search_fields = ("title", "author__username", )
     autocomplete_fields = ("author", )
@@ -27,7 +30,12 @@ class RecipeAdmin(admin.ModelAdmin):
     def get_tag(self, obj):
         return list(obj.recipe_tag.values_list("title", flat=True))
 
-    get_tag.short_description = "Теги"
+    def get_favorite(self, obj):
+        return obj.recipe_favorite.count()
+
+    get_tag.short_description = "теги"
+    get_favorite.short_description = "добавлен в избранное, раз"
+    get_favorite.admin_order_field = "recipe_favorites"
 
 
 @admin.register(Ingredient)

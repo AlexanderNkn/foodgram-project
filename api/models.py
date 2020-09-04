@@ -80,7 +80,7 @@ class Purchase(models.Model):
 
     class Meta:
         unique_together = [["user", "recipe"]]
-        verbose_name = "рецепт в списке покупок"
+        verbose_name = "рецепт в список покупок"
         verbose_name_plural = "рецепты в списке покупок"
 
     def __str__(self):
