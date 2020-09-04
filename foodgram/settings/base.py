@@ -51,9 +51,9 @@ INSTALLED_APPS = [
     "django.contrib.sessions",
     "django.contrib.messages",
     "django.contrib.staticfiles",
-    "users.app.UserConfig",
-    "api.app.ApiConfig",
-    "main.app.MainConfig",
+    "users.apps.UserConfig",
+    "api.apps.ApiConfig",
+    "main.apps.MainConfig",
     "sorl.thumbnail",
 ]
 
