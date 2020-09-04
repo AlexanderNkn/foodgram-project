@@ -29,6 +29,12 @@ class Favorite(models.Model):
         verbose_name = "избранный рецепт"
         verbose_name_plural = "избранные рецепты"
 
+    def clean(self):
+        if self.user.username == self.recipe.author.username:
+            raise ValidationError(
+                "Пользователь не может добавлять в избранное свои рецепты"
+            )
+
     def __str__(self):
         return f"{self.user.username} добавил в избранное {self.recipe.title}"
 
