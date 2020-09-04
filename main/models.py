@@ -2,6 +2,7 @@ import itertools
 
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.safestring import mark_safe
 from django.utils.text import slugify
 
 from .validators import validate_file_size
@@ -69,8 +70,18 @@ class Recipe(models.Model):
 
         super().save(*args, **kwargs)
 
+    def image_img(self):
+        if self.image:
+            return mark_safe(
+                f'<img width="90" height="50" src="{self.image.url}" />'
+            )
+        else:
+            return f"Без изображения" # noqa
+
     def __str__(self):
         return self.title
+
+    image_img.short_description = 'изображение'
 
 
 class Ingredient(models.Model):
