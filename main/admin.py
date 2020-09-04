@@ -7,6 +7,7 @@ class IngredientAmountInline(admin.TabularInline):
     model = IngredientAmount
     min_num = 1
     extra = 0
+    verbose_name = "ингредиент"
 
 
 class TagInline(admin.TabularInline):

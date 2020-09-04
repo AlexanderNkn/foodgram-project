@@ -1,10 +1,9 @@
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin
+from django.contrib import admin, auth
 
 from .models import User
 
 
-class Admin(UserAdmin):
+class Admin(auth.admin.UserAdmin):
     """
     Expand functionality in admin site.
     """
@@ -13,3 +12,4 @@ class Admin(UserAdmin):
 
 
 admin.site.register(User, Admin)
+admin.site.unregister(auth.models.Group)

@@ -105,7 +105,7 @@ class IngredientAmount(models.Model):
     amount = models.DecimalField("количество", max_digits=6, decimal_places=1)
 
     class Meta:
-        verbose_name = "ингредиент"
+        verbose_name = "кол-во ингредиента"
         verbose_name_plural = "кол-во ингредиентов"
 
     def __str__(self):

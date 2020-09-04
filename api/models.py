@@ -14,6 +14,7 @@ class Favorite(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="favorits",
+        verbose_name="пользователь",
     )
     recipe = models.ForeignKey(
         Recipe,
@@ -40,18 +41,18 @@ class Subscribe(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="following",
-        verbose_name="на него подписался"
+        verbose_name="подписался на"
     )
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
         related_name="follower",
-        verbose_name="он подписался на"
+        verbose_name="подписчик"
     )
 
     class Meta:
         unique_together = [["user", "author"]]
-        verbose_name = "подписка"
+        verbose_name = "подписку"
         verbose_name_plural = "подписки"
 
     def __str__(self):
@@ -68,6 +69,7 @@ class Purchase(models.Model):
         User,
         on_delete=models.CASCADE,
         related_name="purchases",
+        verbose_name="пользователь",
     )
     recipe = models.ForeignKey(
         Recipe,
