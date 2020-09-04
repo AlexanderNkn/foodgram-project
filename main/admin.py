@@ -1,5 +1,6 @@
 from django.contrib import admin
-from .models import Recipe, Ingredient, IngredientAmount, Tag
+
+from .models import Ingredient, IngredientAmount, Recipe, Tag
 
 
 class IngredientAmountInline(admin.TabularInline):
@@ -18,7 +19,7 @@ class TagInline(admin.TabularInline):
 class RecipeAdmin(admin.ModelAdmin):
     inlines = (IngredientAmountInline, TagInline)
     list_display = ("id", "author", "title", "duration", "image", "get_tag")
-    list_filter = ("author", "title", "recipe_tag__title")
+    list_filter = ("author", "title", "recipe_tag__title", )
     search_fields = ("title", "author__username", )
     autocomplete_fields = ("author", )
 
