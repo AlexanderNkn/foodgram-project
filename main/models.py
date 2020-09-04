@@ -35,9 +35,6 @@ class Recipe(models.Model):
     slug = models.SlugField(
         "уникальное имя", default="", editable=False, max_length=32
     )
-    #    tag = models.ManyToManyField(
-    #        "Tag", related_name="recipe_tag", verbose_name="тег"
-    #    )
     ingredient = models.ManyToManyField(
         "Ingredient",
         related_name="recipe_ingredient",
