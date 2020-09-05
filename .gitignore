@@ -136,3 +136,6 @@ media/
 
 # migrations
 migrations/
+
+# debug-toolbar
+debug-toolbar
