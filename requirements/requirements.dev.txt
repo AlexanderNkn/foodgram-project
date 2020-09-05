@@ -1,3 +1,4 @@
 -r requirements.prod.txt
 flake8
 black
+django-debug-toolbar==2.2
