@@ -101,7 +101,7 @@ class Ingredient(models.Model):
 
 class IngredientAmount(models.Model):
     """Промежуточная модель между моделями ингредиентов и рецептов,
-    показывает количество ингредиента в конкретном рецепте.
+       показывает количество ингредиента в конкретном рецепте.
     """
 
     ingredient = models.ForeignKey(
@@ -129,7 +129,7 @@ class Tag(models.Model):
         ("Ужин", "Ужин"),
     )
     title = models.CharField("тег", max_length=10, choices=TAG_CHOICES)
-    recipe = recipe = models.ForeignKey(
+    recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
         verbose_name="рецепт",
