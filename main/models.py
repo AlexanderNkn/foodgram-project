@@ -73,7 +73,7 @@ class Recipe(models.Model):
                 f'<img width="90" height="50" src="{self.image.url}" />'
             )
         else:
-            return f"Без изображения" # noqa
+            return f"Без изображения"  # noqa
 
     def __str__(self):
         return self.title
@@ -101,7 +101,7 @@ class Ingredient(models.Model):
 
 class IngredientAmount(models.Model):
     """Промежуточная модель между моделями ингредиентов и рецептов,
-       показывает количество ингредиента в конкретном рецепте.
+    показывает количество ингредиента в конкретном рецепте.
     """
 
     ingredient = models.ForeignKey(
@@ -135,11 +135,27 @@ class Tag(models.Model):
         verbose_name="рецепт",
         related_name="recipe_tag",
     )
+    slug = models.SlugField(
+        "уникальное имя тега", default="", editable=False, max_length=3
+    )
 
     class Meta:
         unique_together = [["title", "recipe"]]
         verbose_name = "тег"
         verbose_name_plural = "теги"
+
+    def _generate_slug(self):
+        value = self.title
+        if value == 'Ужин':
+            self.slug = 's'
+        elif value == 'Обед':
+            self.slug = 'd'
+        else:
+            self.slug = 'b'
+
+    def save(self, *args, **kwargs):
+        self._generate_slug()
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.title
