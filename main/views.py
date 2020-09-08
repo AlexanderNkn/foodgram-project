@@ -9,5 +9,19 @@ def index(request):
 
 
 def recipes(request):
-    recipe_list = Recipe.objects.all()
-    return render(request, "indexNotAuth.html", {"recipe_list": recipe_list}, )
+    tags = request.GET.get('tags', 1)
+    if tags == 1:
+        tags = 'bds'
+        recipe_list = Recipe.objects.all().order_by('-pub_date')
+    else:
+        recipe_list = Recipe.objects.filter(
+            recipe_tag__slug__in=tags
+        ).distinct().order_by('-pub_date')
+    return render(
+        request,
+        'indexNotAuth.html',
+        {
+            'recipe_list': recipe_list,
+            'tags': tags,
+        },
+    )
