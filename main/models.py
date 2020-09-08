@@ -138,20 +138,26 @@ class Tag(models.Model):
     slug = models.SlugField(
         "уникальное имя тега", default="", editable=False, max_length=3
     )
+    color = models.CharField(
+        "цвет тега", max_length=10, default="", editable=False,
+        )
 
     class Meta:
         unique_together = [["title", "recipe"]]
         verbose_name = "тег"
         verbose_name_plural = "теги"
 
-    def _generate_slug(self):
+    def _generate_slug_and_colour(self):
         value = self.title
         if value == 'Ужин':
             self.slug = 's'
+            self.color = 'purple'
         elif value == 'Обед':
             self.slug = 'd'
+            self.color = 'green'
         else:
             self.slug = 'b'
+            self.color = 'orange'
 
     def save(self, *args, **kwargs):
         self._generate_slug()
