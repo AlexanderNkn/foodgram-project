@@ -23,5 +23,6 @@ def recipes(request):
         {
             'recipe_list': recipe_list,
             'tags': tags,
+            'url': 'recipes'
         },
     )

@@ -8,4 +8,4 @@ class User(AbstractUser):
     A custom user model to add features when needed.
     """
     # email required
-    email = models.EmailField(_("email address"))
+    email = models.EmailField(_("email address"), unique=True)

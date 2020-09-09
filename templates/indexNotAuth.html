@@ -1,40 +1,14 @@
 {% extends "base.html" %}
 {% load static %}
 {% block title %}Рецепты{% endblock %}
-<body class="body">
-    <main class="main container"> 
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
         {% block content %}
         <div class="main__header">
             <h1 class="main__title">Рецепты</h1>
-            <ul class="tags">
-                <li class="tags__item">
-                    <a  id="breakfast"
-                        class="tags__checkbox tags__checkbox_style_orange 
-                            {% if 'b' in tags %}tags__checkbox_active{% endif %}" 
-                        href="{% if 'b' in tags %}{% url 'recipes' %}?tags={{ tags|cut:'b' }}
-                            {% else %}{% url 'recipes' %}?tags={{ tags|add:'b' }}{% endif %}">
-                    </a>
-                    <span class="tags__label">Завтрак</span>
-                </li>
-                <li class="tags__item">
-                    <a  id="lunch" 
-                        class="tags__checkbox tags__checkbox_style_green
-                            {% if 'd' in tags %}tags__checkbox_active{% endif %}" 
-                        href="{% if 'd' in tags %}{% url 'recipes' %}?tags={{ tags|cut:'d' }}
-                            {% else %}{% url 'recipes' %}?tags={{ tags|add:'d' }}{% endif %}">
-                    </a>
-                    <span for="lunch" class="tags__label">Обед</span>
-                </li>
-                <li class="tags__item">
-                    <a  id="dinner" 
-                        class="tags__checkbox tags__checkbox_style_purple
-                            {% if 's' in tags %}tags__checkbox_active{% endif %}" 
-                        href="{% if 's' in tags %}{% url 'recipes' %}?tags={{ tags|cut:'s' }}
-                            {% else %}{% url 'recipes' %}?tags={{ tags|add:'s' }}{% endif %}">
-                    </a>
-                    <label for="dinner" class="tags__label">Ужин</label>
-                </li>
-            </ul>
+            
+            {% include 'filterByTag.html' %}
         </div>
         <div class="card-list">
             {% load thumbnail %}
@@ -73,7 +47,6 @@
             </ul>
         </nav>
         {% endblock content %}
-    </main>
     {% block style %}
     <script src="{% static 'js/config/config.js' %}"></script>
     <script src="{% static 'js/components/MainCards.js' %}"></script>
@@ -83,5 +56,3 @@
     <script src="{% static 'js/api/Api.js' %}"></script>
     <script src="{% static 'indexNotAuth.js' %}"></script>
     {% endblock style %}
-</body>
-</html>
