@@ -4,6 +4,7 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
+        {% block header %}{%include 'headerNotAuth.html' %}{% endblock %}
         {% block content %}
         <div class="main__header">
             <h1 class="main__title">Рецепты</h1>
