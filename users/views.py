@@ -12,16 +12,16 @@ class SignUp(CreateView):
     """
 
     form_class = CreationForm
-    success_url = reverse_lazy("recipes")
+    success_url = reverse_lazy("login")
     template_name = "reg.html"
 
 #    def form_valid(self, form):
 #        # валидация формы регистрации позволяет не вводить повторно
 #        # корректные данные, если одновременно были указаны некорректные.
-#        email = form.cleaned_data["email"]
-#        first_name = form.cleaned_data["first_name"]
-#        last_name = form.cleaned_data["last_name"]
-#        self.send_email(email, first_name, last_name)
+#       email = form.cleaned_data["email"].strip()
+#       first_name = form.cleaned_data["first_name"].strip()
+#       last_name = form.cleaned_data["last_name"].strip()
+#       self.send_email(email, first_name, last_name)
 #        return super().form_valid(form)
 
 #    def send_email(self, email, first_name=None, last_name=None):

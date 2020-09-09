@@ -12,17 +12,18 @@ def recipes(request):
     tags = request.GET.get('tags', 1)
     if tags == 1:
         tags = 'bds'
-        recipe_list = Recipe.objects.all().order_by('-pub_date')
+        recipe_list = (
+            Recipe.objects.all().select_related('author').order_by('-pub_date')
+        )
     else:
-        recipe_list = Recipe.objects.filter(
-            recipe_tag__slug__in=tags
-        ).distinct().order_by('-pub_date')
+        recipe_list = (
+            Recipe.objects.select_related('author')
+            .filter(recipe_tag__slug__in=tags)
+            .distinct()
+            .order_by('-pub_date')
+        )
     return render(
         request,
         'indexNotAuth.html',
-        {
-            'recipe_list': recipe_list,
-            'tags': tags,
-            'url': 'recipes'
-        },
+        {'recipe_list': recipe_list, 'tags': tags, 'url': 'recipes'},
     )
