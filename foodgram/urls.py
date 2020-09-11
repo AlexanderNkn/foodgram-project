@@ -29,7 +29,7 @@ urlpatterns = [
 ]
 
 urlpatterns += [
-    path("", include("main.urls")),
+    path("", include("recipes.urls")),
 ]
 
 # urls for static and media

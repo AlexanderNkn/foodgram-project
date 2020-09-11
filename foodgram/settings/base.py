@@ -53,7 +53,7 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "users.apps.UserConfig",
     "api.apps.ApiConfig",
-    "main.apps.MainConfig",
+    "recipes.apps.RecipesConfig",
     "sorl.thumbnail",
 ]
 

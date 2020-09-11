@@ -143,7 +143,6 @@ class Tag(models.Model):
         )
 
     class Meta:
-        unique_together = [["title", "recipe"]]
         verbose_name = "тег"
         verbose_name_plural = "теги"
 

@@ -15,7 +15,7 @@
     {% for recipe in recipe_list %}
     {% thumbnail recipe.image "960x500" crop="center" as im %}
     <div class="card" data-id="{{ recipe.id }}">
-        <a href="#" class="link" target="_blank"><img src="{{ im.url }}" alt="Какой-то текст" class="card__image"></a>
+        <a href="#" class="link" target="_blank"><img src="{{ im.url }}" alt="Картинка" class="card__image"></a>
         <div class="card__body">
             <a class="card__title link" href="#" target="_blank">{{ recipe.title }}</a>
             <ul class="card__items">

@@ -1,6 +1,6 @@
 from django.apps import AppConfig
 
 
-class MainConfig(AppConfig):
-    name = 'main'
+class RecipesConfig(AppConfig):
+    name = 'recipes'
     verbose_name = "управление рецептом"
