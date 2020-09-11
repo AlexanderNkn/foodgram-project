@@ -93,4 +93,32 @@ formDropdownItems.addEventListener('click', ingredients.dropdown);
 // вешаем слушатель на кнопку
 addIng.addEventListener('click', ingredients.addIngredient);
 
-
+// код ниже щелкает по скрытому инпуту, когда на странице создания
+// рецепта пользователь нажимает на красивый ввод тегов 
+const tag0 = document.querySelector('#id_breakfast')
+const tag1 = document.querySelector('#id_lunch')
+const tag2 = document.querySelector('#id_dinner')
+tag0.addEventListener('input', (event) => {
+    const tag00 = document.querySelector('#id_tag_0')
+    if (tag00.checked === true) {
+        tag00.checked = false
+    } else {
+        tag00.checked = true
+    }
+})
+tag1.addEventListener('input', (event) => {
+    const tag11 = document.querySelector('#id_tag_1')
+    if (tag11.checked === true) {
+        tag11.checked = false
+    } else {
+        tag11.checked = true
+    }
+})
+tag2.addEventListener('input', (event) => {
+    const tag22 = document.querySelector('#id_tag_2')
+    if (tag22.checked === true) {
+        tag22.checked = false
+    } else {
+        tag22.checked = true
+    }
+})

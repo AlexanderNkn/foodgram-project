@@ -49,6 +49,7 @@
 
 
 @import "../blocks/tags/tags.css";
+@import "../blocks/tags/hidden.css";
 @import "../blocks/tags/__item/tags__item.css";
 @import "../blocks/tags/__label/tags__label.css";
 @import "../blocks/tags/__checkbox/tags__checkbox.css";
