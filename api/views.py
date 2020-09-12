@@ -6,7 +6,6 @@ from rest_framework.response import Response
 from recipes.models import Ingredient
 
 from .models import Favorite, Purchase, Subscribe
-from .permissions import IsNotAuthor, IsNotRecipeAuthor
 from .serializers import (FavoriteSerializer, IngredientSerializer,
                           PurchaseSerializer, SubscribeSerializer)
 
@@ -17,7 +16,7 @@ class IngredientAPIView(generics.ListAPIView):
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = [filters.SearchFilter]
-    search_fields = ['title', ]
+    search_fields = ['^title', ]
 
 
 class CreateDestroyViewSet(mixins.CreateModelMixin,
@@ -50,7 +49,6 @@ class FavoriteViewSet(CreateDestroyViewSet):
     '''
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
-    permission_classes = [IsAuthenticated, IsNotRecipeAuthor]
 
 
 class PurchaseViewSet(CreateDestroyViewSet):
@@ -65,4 +63,3 @@ class SubscribeViewSet(CreateDestroyViewSet):
     '''Вьюсет добавляет и удаляет подписки на авторов.'''
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
-    permission_classes = [IsAuthenticated, IsNotAuthor]

@@ -16,22 +16,29 @@ function Ingredients() {
     // клик по элементам с сервера
     const dropdown = (e) => {
         if (e.target.classList.contains('form__item-list')) {
-            nameIngredient.value = e.target.textContent;
+            nameIngredient.value = e.target.textContent.split(',')[0];
             formDropdownItems.style.display = ''
             cantidadVal.textContent = e.target.getAttribute('data-val');
         }
     };
     // Добавление элемента из инпута
     const addIngredient = (e) => {
-        if(nameIngredient.value && cantidad.value) {
+        if ((nameIngredient.value && cantidad.value) || (nameIngredient.value && cantidadVal.textContent === 'по вкусу')) {
             const data = getValue();
             const elem = document.createElement('div');
             elem.classList.add('form__field-item-ingredient');
             elem.id = `ing${cur}`;
-            elem.innerHTML = `<span> ${data.name} ${data.value}${data.units}</span> <span class="form__field-item-delete"></span>
+            if (data.value > 0) {
+                elem.innerHTML = `<span> ${data.name} ${data.value}${data.units}</span> <span class="form__field-item-delete"></span>
                              <input id="nameIngredient_${cur}" name="nameIngredient_${cur}" type="hidden" value="${data.name}">
                              <input id="valueIngredient_${cur}" name="valueIngredient_${cur}" type="hidden" value="${data.value}">
-                             <input id="unitsIngredient_${cur}" name="unitsIngredient_${cur}" type="hidden" value="${data.units}">`;
+                             <input id="unitsIngredient_${cur}" name="unitsIngredient_${cur}" type="hidden" value="${data.units}">`
+            } else {
+            elem.innerHTML = `<span> ${data.name} ${data.units}</span> <span class="form__field-item-delete"></span>
+                             <input id="nameIngredient_${cur}" name="nameIngredient_${cur}" type="hidden" value="${data.name}">
+                             <input id="valueIngredient_${cur}" name="valueIngredient_${cur}" type="hidden" value="${data.value}">
+                             <input id="unitsIngredient_${cur}" name="unitsIngredient_${cur}" type="hidden" value="${data.units}">`
+            };
             cur++;
             elem.addEventListener('click', eventDelete);
             formFieldIngredinet.insertAdjacentElement('afterend',elem);
@@ -52,8 +59,10 @@ function Ingredients() {
             value: cantidad.value,
             units: cantidadVal.textContent
         };
+        if (data.units === 'по вкусу') { data.value = 0}
         clearValue(nameIngredient);
         clearValue(cantidad);
+        cantidadVal.textContent = ''
         return data;
     };
     // очистка инпута
@@ -72,7 +81,7 @@ const cbEventInput = (elem) => {
     return api.getIngredients(elem.target.value).then( e => {
         if(e.length !== 0 ) {
             const items = e.map( elem => {
-                return `<a class="form__item-list" data-val="${elem.dimension}"">${elem.title}</a>`
+                return `<a class="form__item-list" data-val="${elem.dimension}">${elem.title}, ${elem.dimension}</a>`
             }).join(' ')
             formDropdownItems.style.display = 'flex';
             formDropdownItems.innerHTML = items;
