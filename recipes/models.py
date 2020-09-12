@@ -159,7 +159,7 @@ class Tag(models.Model):
             self.color = 'orange'
 
     def save(self, *args, **kwargs):
-        self._generate_slug()
+        self._generate_slug_and_colour()
         super().save(*args, **kwargs)
 
     def __str__(self):
