@@ -1,11 +1,13 @@
 from django.http import Http404
 from rest_framework import filters, generics, mixins, viewsets
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from recipes.models import Ingredient
 
 from .models import Favorite, Purchase, Subscribe
+from .permissions import IsOwnerOrAdmin
 from .serializers import (FavoriteSerializer, IngredientSerializer,
                           PurchaseSerializer, SubscribeSerializer)
 
@@ -22,7 +24,7 @@ class IngredientAPIView(generics.ListAPIView):
 class CreateDestroyViewSet(mixins.CreateModelMixin,
                            mixins.DestroyModelMixin,
                            viewsets.GenericViewSet):
-    permission_classes = [IsAuthenticated]
+    permission_classes = [IsAuthenticated & IsOwnerOrAdmin]
     '''
     Вьюсет предоставляет методы POST и DELETE для расширения других классов.
     '''
@@ -39,7 +41,7 @@ class CreateDestroyViewSet(mixins.CreateModelMixin,
             instance = self.get_object()
             self.perform_destroy(instance)
             return Response({"success": "true"})
-        except Http404:
+        except (Http404, PermissionDenied):
             return Response({"success": "false"})
 
 
