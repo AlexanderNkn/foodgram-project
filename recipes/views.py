@@ -11,18 +11,18 @@ def index(request):
 
 
 def recipes(request):
-    '''Предоставляет список рецептов как для аутентированного пользователя
+    """Предоставляет список рецептов как для аутентированного пользователя
     так и для анонима
-    '''
+    """
     tags = request.GET.get('tags', 1)
     if tags == 1:
         tags = 'bds'
-        recipe_list = (
-            Recipe.objects.all().select_related('author').order_by('-pub_date')
-        )
+        recipe_list = Recipe.objects.prefetch_related(
+            'author', 'recipe_tag'
+        ).order_by('-pub_date')
     else:
         recipe_list = (
-            Recipe.objects.select_related('author')
+            Recipe.objects.prefetch_related('author', 'recipe_tag')
             .filter(recipe_tag__slug__in=tags)
             .distinct()
             .order_by('-pub_date')
@@ -49,22 +49,23 @@ def new_recipe(request):
             recipe.author = request.user
             # сохраняем рецепт без тегов и количества ингредиентов
             recipe.save()
+
             # добавляем теги
             tags = form.cleaned_data['tag']
             for tag in tags:
                 Tag.objects.create(recipe=recipe, title=tag)
+
             # добавляем количество ингредиентов
-            ings = []  # список ингредиентов с количеством
-            for key, value in form.data.items():
-                if 'Ingredient' in key:
-                    ings.append(value)
-            objs = []  # собираем объекты IngredientAmount для bulk_create
+            # собираем значения из формы, относящиеся к ингредиентам
+            ings = [value for key, value in form.data.items() if 'Ingredient' in key]  # noqa
+            # собираем объекты IngredientAmount для bulk_create
+            objs = []
             for i in range(0, len(ings), 3):
                 ingredient = Ingredient.objects.get(  # экземпляр ингредиента
                     title=ings[i], dimension=ings[i + 2]
                 )
                 objs.append(IngredientAmount(
-                        ingredient=ingredient, recipe=recipe, amount=ings[i + 1]  # noqa
+                        ingredient=ingredient, recipe=recipe, amount=ings[i + 1],  # noqa
                     )
                 )
             IngredientAmount.objects.bulk_create(objs)
