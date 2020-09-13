@@ -1,7 +1,7 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import Recipe
+from .models import Recipe, Tag, IngredientAmount, Ingredient
 from .forms import RecipeForm
 
 
@@ -12,7 +12,7 @@ def index(request):
 
 def recipes(request):
     '''Предоставляет список рецептов как для аутентированного пользователя
-       так и для анонима
+    так и для анонима
     '''
     tags = request.GET.get('tags', 1)
     if tags == 1:
@@ -42,13 +42,33 @@ def recipes(request):
 @login_required
 def new_recipe(request):
     '''Создание нового рецепта'''
-    if request.method == "POST":
+    if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         if form.is_valid():
             recipe = form.save(commit=False)
             recipe.author = request.user
+            # сохраняем рецепт без тегов и количества ингредиентов
             recipe.save()
-            return redirect("index")
+            # добавляем теги
+            tags = form.cleaned_data['tag']
+            for tag in tags:
+                Tag.objects.create(recipe=recipe, title=tag)
+            # добавляем количество ингредиентов
+            ings = []  # список ингредиентов с количеством
+            for key, value in form.data.items():
+                if 'Ingredient' in key:
+                    ings.append(value)
+            objs = []  # собираем объекты IngredientAmount для bulk_create
+            for i in range(0, len(ings), 3):
+                ingredient = Ingredient.objects.get(  # экземпляр ингредиента
+                    title=ings[i], dimension=ings[i + 2]
+                )
+                objs.append(IngredientAmount(
+                        ingredient=ingredient, recipe=recipe, amount=ings[i + 1]  # noqa
+                    )
+                )
+            IngredientAmount.objects.bulk_create(objs)
+            return redirect('index')
     else:
         form = RecipeForm(request.POST or None)
-    return render(request, "formRecipe.html", {"form": form})
+    return render(request, 'formRecipe.html', {'form': form})

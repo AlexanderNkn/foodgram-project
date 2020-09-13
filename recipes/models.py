@@ -11,45 +11,45 @@ User = get_user_model()
 
 
 class Recipe(models.Model):
-    """
+    '''
     Модель рецептов пользователя.
-    """
+    '''
 
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
-        related_name="recipe_author",
-        verbose_name="автор рецепта",
+        related_name='recipe_author',
+        verbose_name='автор рецепта',
     )
-    title = models.CharField("название рецепта", max_length=256)
-    duration = models.PositiveSmallIntegerField("время приготовления")
-    text = models.TextField("текст рецепта")
+    title = models.CharField('название рецепта', max_length=256, blank=False)
+    duration = models.PositiveSmallIntegerField('время приготовления')
+    text = models.TextField('текст рецепта', blank=False)
     pub_date = models.DateTimeField(
-        "дата публикации", auto_now_add=True, db_index=True
+        'дата публикации', auto_now_add=True, db_index=True
     )
     image = models.ImageField(
-        upload_to="recipe_images/",
+        upload_to='recipe_images/',
         validators=[validate_file_size],
-        verbose_name="изображение",
+        verbose_name='изображение',
     )
     slug = models.SlugField(
-        "уникальное имя", default="", editable=False, max_length=32
+        'уникальное имя', default='', editable=False, max_length=32
     )
     ingredient = models.ManyToManyField(
-        "Ingredient",
-        related_name="recipe_ingredient",
-        through="IngredientAmount",
-        verbose_name="ингредиент",
+        'Ingredient',
+        related_name='recipe_ingredient',
+        through='IngredientAmount',
+        verbose_name='ингредиент',
     )
 
     class Meta:
-        ordering = ("-pub_date",)
-        verbose_name = "рецепт"
-        verbose_name_plural = "рецепты"
+        ordering = ('-pub_date',)
+        verbose_name = 'рецепт'
+        verbose_name_plural = 'рецепты'
 
     def _generate_slug(self):
         # функция создает уникальный slug из названия рецепта(на кириллице)
-        max_length = self._meta.get_field("slug").max_length
+        max_length = self._meta.get_field('slug').max_length
         value = self.title
         slug_candidate = slug_original = slugify(value, allow_unicode=True)[
             :max_length
@@ -57,7 +57,7 @@ class Recipe(models.Model):
         for i in itertools.count(1):
             if not Recipe.objects.filter(slug=slug_candidate).exists():
                 break
-            slug_candidate = "{}-{}".format(slug_original, i)
+            slug_candidate = '{}-{}'.format(slug_original, i)
 
         self.slug = slug_candidate
 
@@ -73,7 +73,7 @@ class Recipe(models.Model):
                 f'<img width="90" height="50" src="{self.image.url}" />'
             )
         else:
-            return f"Без изображения"  # noqa
+            return f'Без изображения'  # noqa
 
     def __str__(self):
         return self.title
@@ -82,69 +82,69 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    """Модель ингредиентов в рецепте."""
+    '''Модель ингредиентов в рецепте.'''
 
     title = models.CharField(
-        "название ингредиента", max_length=128, db_index=True
+        'название ингредиента', max_length=128, db_index=True
     )
-    dimension = models.CharField("единицы измерения", max_length=16)
+    dimension = models.CharField('единицы измерения', max_length=16)
 
     class Meta:
-        unique_together = [["title", "dimension"]]
-        verbose_name = "ингредиент"
-        verbose_name_plural = "ингредиенты"
-        ordering = ("title",)
+        unique_together = [['title', 'dimension']]
+        verbose_name = 'ингредиент'
+        verbose_name_plural = 'ингредиенты'
+        ordering = ('title',)
 
     def __str__(self):
-        return f"{self.title}, {self.dimension}"
+        return f'{self.title}, {self.dimension}'
 
 
 class IngredientAmount(models.Model):
-    """Промежуточная модель между моделями ингредиентов и рецептов,
+    '''Промежуточная модель между моделями ингредиентов и рецептов,
     показывает количество ингредиента в конкретном рецепте.
-    """
+    '''
 
     ingredient = models.ForeignKey(
-        Ingredient, on_delete=models.CASCADE, verbose_name="ингредиент"
+        Ingredient, on_delete=models.CASCADE, verbose_name='ингредиент'
     )
     recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, verbose_name="рецепт"
+        Recipe, on_delete=models.CASCADE, verbose_name='рецепт'
     )
-    amount = models.DecimalField("количество", max_digits=6, decimal_places=1)
+    amount = models.DecimalField('количество', max_digits=6, decimal_places=1)
 
     class Meta:
-        verbose_name = "кол-во ингредиента"
-        verbose_name_plural = "кол-во ингредиентов"
+        verbose_name = 'кол-во ингредиента'
+        verbose_name_plural = 'кол-во ингредиентов'
 
     def __str__(self):
-        return f"Из рецепта '{self.recipe}'"
+        return f'Из рецепта "{self.recipe}"'
 
 
 class Tag(models.Model):
-    """Модель тегов"""
+    '''Модель тегов'''
 
     TAG_CHOICES = (
-        ("Завтрак", "Завтрак"),
-        ("Обед", "Обед"),
-        ("Ужин", "Ужин"),
+        ('Завтрак', 'Завтрак'),
+        ('Обед', 'Обед'),
+        ('Ужин', 'Ужин'),
     )
-    title = models.CharField("тег", max_length=10, choices=TAG_CHOICES)
+    title = models.CharField('тег', max_length=10, choices=TAG_CHOICES)
     recipe = models.ForeignKey(
         Recipe,
         on_delete=models.CASCADE,
-        verbose_name="рецепт",
-        related_name="recipe_tag",
+        verbose_name='рецепт',
+        related_name='recipe_tag',
     )
     slug = models.SlugField(
-        "уникальное имя тега", default="", editable=False, max_length=3
+        'уникальное имя тега', default='', editable=False, max_length=3
     )
     color = models.CharField(
-        "цвет тега", max_length=10, default="", editable=False,
+        'цвет тега', max_length=10, default='', editable=False,
         )
 
     class Meta:
-        verbose_name = "тег"
-        verbose_name_plural = "теги"
+        verbose_name = 'тег'
+        verbose_name_plural = 'теги'
 
     def _generate_slug_and_colour(self):
         value = self.title

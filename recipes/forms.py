@@ -1,18 +1,18 @@
 from django import forms
 
-from .models import Ingredient
+from .models import Recipe
 
 
-class RecipeForm(forms.Form):
+class RecipeForm(forms.ModelForm):
     '''Класс формы для создания рецепта'''
 
     TAG_CHOICES = (
-        ("breakfast", "Завтрак"),
-        ("lunch", "Обед"),
-        ("dinner", "Ужин"),
+        ('Завтрак', 'Завтрак'),
+        ('Обед', 'Обед'),
+        ('Ужин', 'Ужин'),
     )
 
-    title = forms.CharField(max_length=256, required=True)
+    title = forms.CharField(max_length=256)
     tag = forms.MultipleChoiceField(
         widget=forms.CheckboxSelectMultiple,
         choices=TAG_CHOICES,
@@ -20,7 +20,7 @@ class RecipeForm(forms.Form):
     duration = forms.IntegerField(min_value=1)
     text = forms.CharField(widget=forms.Textarea)
     image = forms.ImageField()
-    ingredient = forms.ModelMultipleChoiceField(
-        widget=forms.CheckboxSelectMultiple,
-        queryset=Ingredient.objects.all(),
-    )
+
+    class Meta:
+        model = Recipe
+        fields = ('title', 'duration', 'text', 'image', )

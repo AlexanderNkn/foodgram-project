@@ -27,7 +27,7 @@ class RecipeAdmin(admin.ModelAdmin):
     list_filter = ('author', 'recipe_tag__title', )
     search_fields = ('title', 'author__username', )
     autocomplete_fields = ('author', )
-    ordering = ('title', )
+    ordering = ('-pub_date', )
 
     def get_queryset(self, request):
         queryset = super().get_queryset(request)
