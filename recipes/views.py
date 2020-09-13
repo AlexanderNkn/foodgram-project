@@ -1,8 +1,8 @@
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import redirect, render
 
-from .models import Recipe, Tag, IngredientAmount, Ingredient
 from .forms import RecipeForm
+from .models import Ingredient, IngredientAmount, Recipe, Tag
 
 
 def index(request):
@@ -66,7 +66,9 @@ def new_recipe(request):
                 elif 'unitsIngredient' in key:
                     dimension.append(value)
             # собираем список экземпляров ингредиентов
-            ingredient_list = Ingredient.objects.filter(title__in=title).filter(  # noqa
+            ingredient_list = Ingredient.objects.filter(
+                title__in=title
+            ).filter(  # noqa
                 dimension__in=dimension
             )
             # собираем объекты IngredientAmount для bulk_create
@@ -84,3 +86,15 @@ def new_recipe(request):
     else:
         form = RecipeForm(request.POST or None)
     return render(request, 'formRecipe.html', {'form': form})
+
+
+def recipe_view(request, recipe_id):
+    '''Страница индивидуального рецепта'''
+    recipe = Recipe.objects.filter(id=recipe_id).prefetch_related(
+        'author', 'recipe_tag', 'recipe_amount'
+    )
+    return render(
+        request,
+        'singlePageNotAuth.html',
+        {'recipe': recipe},
+    )

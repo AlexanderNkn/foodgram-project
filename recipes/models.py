@@ -11,9 +11,9 @@ User = get_user_model()
 
 
 class Recipe(models.Model):
-    '''
+    """
     Модель рецептов пользователя.
-    '''
+    """
 
     author = models.ForeignKey(
         User,
@@ -100,15 +100,15 @@ class Ingredient(models.Model):
 
 
 class IngredientAmount(models.Model):
-    '''Промежуточная модель между моделями ингредиентов и рецептов,
+    """Промежуточная модель между моделями ингредиентов и рецептов,
     показывает количество ингредиента в конкретном рецепте.
-    '''
+    """
 
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, verbose_name='ингредиент'
     )
     recipe = models.ForeignKey(
-        Recipe, on_delete=models.CASCADE, verbose_name='рецепт'
+        Recipe, on_delete=models.CASCADE, related_name='recipe_amount',
     )
     amount = models.DecimalField('количество', max_digits=6, decimal_places=1)
 
@@ -139,8 +139,11 @@ class Tag(models.Model):
         'уникальное имя тега', default='', editable=False, max_length=3
     )
     color = models.CharField(
-        'цвет тега', max_length=10, default='', editable=False,
-        )
+        'цвет тега',
+        max_length=10,
+        default='',
+        editable=False,
+    )
 
     class Meta:
         verbose_name = 'тег'
