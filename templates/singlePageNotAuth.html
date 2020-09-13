@@ -1,27 +1,27 @@
 {% extends "base.html" %}
 {% load static %}
-{% block title %}{{ recipe.0.title }}{% endblock %}
+{% block title %}{{ recipe.title }}{% endblock %}
 {% block css %}
     <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 {% endblock %}
     {% block header %}{%include 'headerNotAuth.html' %}{% endblock %}
     {% block content %}
-        <div class="single-card" data-id="{{ recipe.0.id }}">
+        <div class="single-card" data-id="{{ recipe.id }}">
             {% load thumbnail %}
-            {% thumbnail recipe.0.image "960x500" as im %}
+            {% thumbnail recipe.image "960x500" as im %}
             <img src="{{ im.url }}" alt="Картинка" class="single-card__image">
             <div class="single-card__info">
                 <div class="single-card__header-info">
-                    <h1 class="single-card__title">{{ recipe.0.title }}</h1>
+                    <h1 class="single-card__title">{{ recipe.title }}</h1>
                 </div>
                 <ul class="single-card__items">
-                    {% for tag in recipe.0.recipe_tag.all %}
+                    {% for tag in recipe.recipe_tag.all %}
                         <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
                     {% endfor %}
                 </ul>
                 <div class="single-card__items single-card__items_column">
-                    <p class="single-card__text"><span class="icon-time"></span>{{ recipe.0.duration }} мин.</p>
-                    <p class="single-card__text"><span class="icon-user"></span>{{ recipe.0.author.get_full_name }}</p>
+                    <p class="single-card__text"><span class="icon-time"></span>{{ recipe.duration }} мин.</p>
+                    <p class="single-card__text"><span class="icon-user"></span>{{ recipe.author.get_full_name }}</p>
                 </div>
                 <ul class="single-card__items">
                     <li class="single-card__item">
@@ -32,14 +32,14 @@
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингридиенты:</h3>
                     <div class="single-card__items single-card__items_column">
-                        {% for ing in recipe.0.recipe_amount.all %}
+                        {% for ing in recipe.recipe_amount.all %}
                         <p class=" single-card__section-item">{{ ing.ingredient.title }} - {% if ing.amount > 0 %}{{ ing.amount|floatformat:-1 }}{% endif %} {{ ing.ingredient.dimension }}.</p>
                         {% endfor %}
                     </div>
                 </div>
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Описание:</h3>
-                    <p class=" single-card__section-text">{{ recipe.0.text }}</p>
+                    <p class=" single-card__section-text">{{ recipe.text }}</p>
                 </div>
             </div>
         </div>

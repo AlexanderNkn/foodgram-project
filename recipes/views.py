@@ -1,4 +1,8 @@
+import functools
+import operator
+
 from django.contrib.auth.decorators import login_required
+from django.db.models import Q
 from django.shortcuts import redirect, render
 
 from .forms import RecipeForm
@@ -66,11 +70,14 @@ def new_recipe(request):
                 elif 'unitsIngredient' in key:
                     dimension.append(value)
             # собираем список экземпляров ингредиентов
-            ingredient_list = Ingredient.objects.filter(
-                title__in=title
-            ).filter(  # noqa
-                dimension__in=dimension
+            query = functools.reduce(
+                operator.or_,
+                (
+                    Q(title=t, dimension=d) for t, d in zip(title, dimension)
+                ),
             )
+            ingredient_list = Ingredient.objects.filter(query)
+
             # собираем объекты IngredientAmount для bulk_create
             objs = []
             for i in range(len(ingredient_list)):
@@ -90,11 +97,16 @@ def new_recipe(request):
 
 def recipe_view(request, recipe_id):
     '''Страница индивидуального рецепта'''
-    recipe = Recipe.objects.filter(id=recipe_id).prefetch_related(
+    recipe = list(Recipe.objects.filter(id=recipe_id).prefetch_related(
         'author', 'recipe_tag', 'recipe_amount'
+    ))[0]
+    template_name = (
+        'singlePage.html'
+        if request.user.is_authenticated
+        else 'singlePageNotAuth.html'
     )
     return render(
         request,
-        'singlePageNotAuth.html',
+        template_name,
         {'recipe': recipe},
     )
