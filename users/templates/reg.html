@@ -22,7 +22,8 @@
                            name="{{ field.html_name }}"
                            id="{{ field.id_for_label }}"
                            value="{% if field.widget_type != 'password' %}{{ field.value|default_if_none:'' }}{% endif %}"
-                           class="form__input">
+                           class="form__input"
+                           {% if field.field.required %}required{% endif %}>
                     <span class="form__error">{{ field.errors }}</span>
                 </div>
             </div>
