@@ -57,15 +57,26 @@ def new_recipe(request):
 
             # добавляем количество ингредиентов
             # собираем значения из формы, относящиеся к ингредиентам
-            ings = [value for key, value in form.data.items() if 'Ingredient' in key]  # noqa
+            title, amount, dimension = [], [], []
+            for key, value in form.data.items():
+                if 'nameIngredient' in key:
+                    title.append(value)
+                elif 'valueIngredient' in key:
+                    amount.append(value)
+                elif 'unitsIngredient' in key:
+                    dimension.append(value)
+            # собираем список экземпляров ингредиентов
+            ingredient_list = Ingredient.objects.filter(title__in=title).filter(  # noqa
+                dimension__in=dimension
+            )
             # собираем объекты IngredientAmount для bulk_create
             objs = []
-            for i in range(0, len(ings), 3):
-                ingredient = Ingredient.objects.get(  # экземпляр ингредиента
-                    title=ings[i], dimension=ings[i + 2]
-                )
-                objs.append(IngredientAmount(
-                        ingredient=ingredient, recipe=recipe, amount=ings[i + 1],  # noqa
+            for i in range(len(ingredient_list)):
+                objs.append(
+                    IngredientAmount(
+                        ingredient=ingredient_list[i],
+                        recipe=recipe,
+                        amount=amount[i],
                     )
                 )
             IngredientAmount.objects.bulk_create(objs)
