@@ -14,9 +14,9 @@ def index(request):
     return redirect('recipes')
 
 
-def recipes(request):
-    """Предоставляет список рецептов как для аутентированного пользователя
-    так и для анонима
+def filter_tag(request):
+    """Функция готовит общую выборку рецептов в зависимости от тега
+    для дальнейшего фильтрования при необходимости.
     """
     tags = request.GET.get('tags', 1)
     if tags == 1:
@@ -31,6 +31,14 @@ def recipes(request):
             .distinct()
             .order_by('-pub_date')
         )
+    return recipe_list, tags
+
+
+def recipes(request):
+    """Предоставляет список рецептов как для аутентированного пользователя
+    так и для анонима
+    """
+    recipe_list, tags = filter_tag(request)
     template_name = (
         'indexAuth.html'
         if request.user.is_authenticated
@@ -39,7 +47,11 @@ def recipes(request):
     return render(
         request,
         template_name,
-        {'recipe_list': recipe_list, 'tags': tags, 'url': 'recipes'},
+        {
+            'recipe_list': recipe_list,
+            'tags': tags,
+            'url': 'recipes',
+        },
     )
 
 
@@ -72,9 +84,7 @@ def new_recipe(request):
             # собираем список экземпляров ингредиентов
             query = functools.reduce(
                 operator.or_,
-                (
-                    Q(title=t, dimension=d) for t, d in zip(title, dimension)
-                ),
+                (Q(title=t, dimension=d) for t, d in zip(title, dimension)),
             )
             ingredient_list = Ingredient.objects.filter(query)
 
@@ -97,16 +107,26 @@ def new_recipe(request):
 
 def recipe_view(request, recipe_id):
     '''Страница индивидуального рецепта'''
-    recipe = list(Recipe.objects.filter(id=recipe_id).prefetch_related(
-        'author', 'recipe_tag', 'recipe_amount'
-    ))[0]
+    recipe = list(
+        Recipe.objects.filter(id=recipe_id).prefetch_related(
+            'author',
+            'recipe_tag',
+        )
+    )[0]
     template_name = (
         'singlePage.html'
         if request.user.is_authenticated
         else 'singlePageNotAuth.html'
     )
+    return render(request, template_name, {'recipe': recipe})
+
+
+def profile(request, username):
+    '''Страница с рецептами одного автора'''
+    recipe_list, tags = filter_tag(request)
+    recipe_list = recipe_list.filter(author__username=username)
     return render(
         request,
-        template_name,
-        {'recipe': recipe},
+        'authorRecipe.html',
+        {'recipe_list': recipe_list, 'arg': username, 'tags': tags},
     )

@@ -1,0 +1,68 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Рецепты{% endblock %}
+{% block css %}
+    <link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+    {% block header %}{%include 'headerAuth.html' %}{% endblock %}
+    {% block content %}
+        <div class="main__header">
+            <h1 class="main__title">{{ recipe.0.author.get_full_name }}</h1>
+            {% include 'filterByTag.html' %}
+        </div>
+<!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
+        <div class="author-subscribe" data-author="{{ recipe.author_id }}">
+            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></p>
+        </div>
+        <div class="card-list" >
+    {% load thumbnail %}
+    {% for recipe in recipe_list %}
+    {% thumbnail recipe.image "960x500" crop="center" as im %}
+    <div class="card" data-id="{{ recipe.id }}">
+        <a href="{% url 'recipe_view' recipe.id %}" class="link"><img src="{{ im.url }}" alt="Картинка" class="card__image"></a>
+        <div class="card__body">
+            <a class="card__title link" href="{% url 'recipe_view' recipe.id %}">{{ recipe.title }}</a>
+            <ul class="card__items">
+                {% for tag in recipe.recipe_tag.all %}
+                <li class="card__item"><span class="badge badge_style_{{ tag.color }}">{{ tag.title }}</span></li>
+                {% endfor %}
+            </ul>
+            <div class="card__items card__items_column">
+                <p class="card__text"><span class="icon-time"></span> {{ recipe.duration }} мин.</p>
+                <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author %}"
+                        style="color: black">{{ recipe.author.get_full_name }}</a></p>
+            </div>
+        </div>
+        <div class="card__footer">
+            <button class="button button_style_light-blue" name="purchases" data-out><span
+                    class="icon-plus button__icon"></span>Добавить в покупки</button>
+            <button class="button button_style_none" name="favorites" data-out><span
+                    class="icon-favorite"></span></button>
+        </div>
+    </div>
+    {% endthumbnail %}
+    {% endfor %}
+    </div>
+        <nav class="pagination" aria-label="Search results pages">
+            <ul class="pagination__container">
+                <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
+                <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="#">1</a></li>
+                <li class="pagination__item"><a class="pagination__link link" href="#">2</a></li>
+                <li class="pagination__item"><a class="pagination__link link" href="#">3</a></li>
+                <li class="pagination__item"><a class="pagination__link link" href="#">4</a></li>
+                <li class="pagination__item"><a class="pagination__link link" href="#">5</a></li>
+                <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-right"></span></a></li>
+            </ul>
+        </nav>
+{% endblock content %}
+{% block style %}
+<script src="{% static './js/components/MainCards.js' %}"></script>
+<script src="{% static './js/components/Purchases.js' %}"></script>
+<script src="{% static './js/components/Favorites.js' %}"></script>
+<script src="{% static './js/components/Subscribe.js' %}"></script>
+<script src="{% static './js/config/config.js' %}"></script>
+<script src="{% static './js/components/AuthorRecipe.js' %}"></script>
+<script src="{% static './js/components/Header.js' %}"></script>
+<script src="{% static './js/api/Api.js' %}"></script>
+<script src="{% static 'authorRecipe.js' %}"></script>
+{% endblock style %}

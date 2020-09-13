@@ -4,7 +4,9 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'pages/single.css' %}">
 {% endblock %}
-    {% block header %}{%include 'headerAuth.html' %}{% endblock %}
+    {% block header %}
+    {% include 'headerAuth.html' %}
+    {% endblock %}
     {% block content %}
         <div class="single-card" data-id="{{ recipe.id }}">
             {% load thumbnail %}
