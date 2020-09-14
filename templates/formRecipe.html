@@ -35,7 +35,7 @@
                                    name="breakfast"
                                    id="id_breakfast"
                                    class="tags__checkbox tags__checkbox_style_orange"
-                                   {% if 'breakfast' in form.data %}checked{% endif %}>
+                                   {% if 'breakfast' in tags %}checked{% endif %}>
                             <label for="id_breakfast" class="tags__label">Завтрак</label>
                         </div>
                         <div class="tags__item">
@@ -43,7 +43,7 @@
                                    name="lunch"
                                    id="id_lunch"
                                    class="tags__checkbox tags__checkbox_style_green"
-                                   {% if 'lunch' in form.data %}checked{% endif %}>
+                                   {% if 'lunch' in tags %}checked{% endif %}>
                             <label for="id_lunch" class="tags__label">Обед</label>
                         </div>
                         <div class="tags__item">
@@ -51,7 +51,7 @@
                                    name="dinner"
                                    id="id_dinner"
                                    class="tags__checkbox tags__checkbox_style_purple"
-                                   {% if 'dinner' in form.data %}checked{% endif %}>
+                                   {% if 'dinner' in tags %}checked{% endif %}>
                             <label for="id_dinner" class="tags__label">Ужин</label>
                         </div>
                     </div>
@@ -89,16 +89,15 @@
             <div class="form__group">
                 <label for="{{ form.text.id_for_label }}" class="form__label">Описание</label>
                 <div class="form__field-group">
-                    <textarea name="{{ form.text.html_name }}" 
-                              id="{{ form.text.id_for_label }}"
-                              rows="8" class="form__textarea" required></textarea>
+                   {{ form.text }}
                     <span class="form__error">{{ form.text.errors }}</span>
                 </div>
             </div>
             <div class="form__group">
                 <span class="form__label">Загрузить фото</span>
                 <div class="form__field-group">
-                    <input type="file" name="{{ form.image.html_name }}" id="{{ form.image.id_for_label }}" required>
+                    <label for="{{ form.image.id_for_label }}" class="form__file-button">Выбрать файл</label>
+                    <input type="file" class="form__file" name="image" id="{{ form.image.id_for_label }}" required>
                     <span class="form__error">{{ form.image.errors }}</span>
                 </div>
             </div>

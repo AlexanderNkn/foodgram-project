@@ -3,7 +3,7 @@ import operator
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import get_object_or_404, redirect, render
+from django.shortcuts import redirect, render
 
 from .forms import RecipeForm
 from .models import Ingredient, IngredientAmount, Recipe, Tag
@@ -34,6 +34,62 @@ def filter_tag(request):
     return recipe_list, tags
 
 
+def get_tag(tags):
+    # функция переводит русские названия в английские
+    tag_dict = {
+        'Завтрак': 'breakfast',
+        'Обед': 'lunch',
+        'Ужин': 'dinner',
+    }
+    return [tag_dict[item] for item in tags]
+
+
+def save_recipe(request, form):
+    # функция сохраняет данные при создании и редактировании рецепта
+    recipe = form.save(commit=False)
+    recipe.author = request.user
+    # сохраняем рецепт без тегов и количества ингредиентов
+    recipe.save()
+
+    # добавляем теги
+    tags = form.cleaned_data['tag']
+    for tag in tags:
+        Tag.objects.create(recipe=recipe, title=tag)
+
+    # добавляем количество ингредиентов
+    # собираем значения из формы, относящиеся к ингредиентам
+    title, amount, dimension = [], [], []
+    for key, value in form.data.items():
+        if 'nameIngredient' in key:
+            title.append(value)
+        elif 'valueIngredient' in key:
+            amount.append(value)
+        elif 'unitsIngredient' in key:
+            dimension.append(value)
+    # собираем список экземпляров ингредиентов
+    try:
+        query = functools.reduce(
+            operator.or_,
+            (Q(title=t, dimension=d) for t, d in zip(title, dimension)),
+        )
+        ingredient_list = Ingredient.objects.filter(query)
+
+        # собираем объекты IngredientAmount для bulk_create
+        objs = []
+        for i in range(len(ingredient_list)):
+            objs.append(
+                IngredientAmount(
+                    ingredient=ingredient_list[i],
+                    recipe=recipe,
+                    amount=amount[i],
+                )
+            )
+        IngredientAmount.objects.bulk_create(objs)
+    except TypeError:
+        pass
+    return None
+
+
 def recipes(request):
     """Предоставляет список рецептов как для аутентированного пользователя
     так и для анонима
@@ -61,48 +117,14 @@ def new_recipe(request):
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         if form.is_valid():
-            recipe = form.save(commit=False)
-            recipe.author = request.user
-            # сохраняем рецепт без тегов и количества ингредиентов
-            recipe.save()
-
-            # добавляем теги
-            tags = form.cleaned_data['tag']
-            for tag in tags:
-                Tag.objects.create(recipe=recipe, title=tag)
-
-            # добавляем количество ингредиентов
-            # собираем значения из формы, относящиеся к ингредиентам
-            title, amount, dimension = [], [], []
-            for key, value in form.data.items():
-                if 'nameIngredient' in key:
-                    title.append(value)
-                elif 'valueIngredient' in key:
-                    amount.append(value)
-                elif 'unitsIngredient' in key:
-                    dimension.append(value)
-            # собираем список экземпляров ингредиентов
-            query = functools.reduce(
-                operator.or_,
-                (Q(title=t, dimension=d) for t, d in zip(title, dimension)),
-            )
-            ingredient_list = Ingredient.objects.filter(query)
-
-            # собираем объекты IngredientAmount для bulk_create
-            objs = []
-            for i in range(len(ingredient_list)):
-                objs.append(
-                    IngredientAmount(
-                        ingredient=ingredient_list[i],
-                        recipe=recipe,
-                        amount=amount[i],
-                    )
-                )
-            IngredientAmount.objects.bulk_create(objs)
+            save_recipe(request, form)
             return redirect('index')
+        tags = request.POST.getlist('tag')
+        tags = get_tag(tags)
     else:
         form = RecipeForm(request.POST or None)
-    return render(request, 'formRecipe.html', {'form': form})
+        tags = []  # при создании рецепта все теги сначала неактивны
+    return render(request, 'formRecipe.html', {'form': form, 'tags': tags})
 
 
 def recipe_view(request, recipe_id):
@@ -126,33 +148,38 @@ def profile(request, username):
     recipe_list, tags = filter_tag(request)
     recipe_list = recipe_list.filter(author__username=username)
     return render(
-        request,
-        'authorRecipe.html',
-        {'recipe_list': recipe_list, 'arg': username, 'tags': tags},
-    )
+        request, 'authorRecipe.html',
+        {'recipe_list': recipe_list, 'arg': username, 'tags': tags},)
 
 
 @login_required
 def recipe_edit(request, recipe_id):
     '''Редактирование рецепта'''
-    recipe = get_object_or_404(Recipe, id=recipe_id)
+    recipe = list(Recipe.objects.filter(id=recipe_id)
+                  .prefetch_related('author', 'recipe_tag'))[0]
     # проверка, что текущий юзер и автор рецепта совпадают
-    if request.user == recipe.author:
-        if request.method == "POST":
-            form = RecipeForm(
-                request.POST or None,
-                files=request.FILES or None,
-                instance=recipe,
-            )
-            if form.is_valid():
-                recipe = form.save(commit=False)
-                recipe.author = request.user
-                recipe.save()
-                return redirect('recipe_view', recipe_id=recipe_id)
-                # можно ли убрать else
-        else:
-            form = RecipeForm(instance=recipe)
-        return render(
-            request, 'formChangeRecipe.html', {"form": form, "recipe": recipe}
-        )
-    return redirect('recipe_view', recipe_id=recipe_id)
+    if request.user != recipe.author:
+        return redirect('recipe_view', recipe_id=recipe_id)
+    if request.method == "POST":
+        form = RecipeForm(request.POST or None,
+                          files=request.FILES or None, instance=recipe)
+        if form.is_valid():
+            # удаляем из рецепта предыдущие данные по инредиентам и
+            # их количествам. Так как они заносились не через форму, они
+            # не будут заменяться в форме.
+            recipe.ingredient.remove()
+            recipe.recipe_amount.all().delete()
+            recipe.recipe_tag.all().delete()
+            save_recipe(request, form)
+            return redirect('recipe_view', recipe_id=recipe_id)
+        tags = request.POST.getlist('tag')
+        tags = get_tag(tags)
+    else:
+        # нужно вернуть теги из db при запросе GET
+        tags_saved = recipe.recipe_tag.values_list('title', flat=True)
+        form = RecipeForm(instance=recipe)
+        form.fields['tag'].initial = list(tags_saved)
+        tags = get_tag(tags_saved)
+    return render(
+        request, 'formChangeRecipe.html',
+        {"form": form, "recipe": recipe, 'tags': tags})

@@ -7,7 +7,7 @@
     {% block header %}{%include 'headerAuth.html' %}{% endblock %}
     {% block content %}
         <div class="main__header">
-            <h1 class="main__title">{{ recipe.0.author.get_full_name }}</h1>
+            <h1 class="main__title">{{ recipe_list.0.author.get_full_name }}</h1>
             {% include 'filterByTag.html' %}
         </div>
 <!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
