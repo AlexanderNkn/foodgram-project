@@ -3,7 +3,7 @@ import operator
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
-from django.shortcuts import redirect, render
+from django.shortcuts import get_object_or_404, redirect, render
 
 from .forms import RecipeForm
 from .models import Ingredient, IngredientAmount, Recipe, Tag
@@ -130,3 +130,29 @@ def profile(request, username):
         'authorRecipe.html',
         {'recipe_list': recipe_list, 'arg': username, 'tags': tags},
     )
+
+
+@login_required
+def recipe_edit(request, recipe_id):
+    '''Редактирование рецепта'''
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    # проверка, что текущий юзер и автор рецепта совпадают
+    if request.user == recipe.author:
+        if request.method == "POST":
+            form = RecipeForm(
+                request.POST or None,
+                files=request.FILES or None,
+                instance=recipe,
+            )
+            if form.is_valid():
+                recipe = form.save(commit=False)
+                recipe.author = request.user
+                recipe.save()
+                return redirect('recipe_view', recipe_id=recipe_id)
+                # можно ли убрать else
+        else:
+            form = RecipeForm(instance=recipe)
+        return render(
+            request, 'formChangeRecipe.html', {"form": form, "recipe": recipe}
+        )
+    return redirect('recipe_view', recipe_id=recipe_id)
