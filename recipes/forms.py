@@ -18,8 +18,8 @@ class RecipeForm(forms.ModelForm):
         choices=TAG_CHOICES,
     )
     duration = forms.IntegerField(min_value=1)
-    text = forms.CharField(widget=forms.Textarea)
-    image = forms.ImageField()
+    text = forms.CharField(widget=forms.Textarea(attrs={'class':'form__textarea'}))
+    image = forms.ImageField(required=False)
 
     class Meta:
         model = Recipe
