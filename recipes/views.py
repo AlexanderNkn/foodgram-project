@@ -6,7 +6,7 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
-from api.models import Favorite
+from api.models import Favorite, Purchase
 
 from .forms import RecipeForm
 from .models import Ingredient, IngredientAmount, Recipe, Tag
@@ -199,3 +199,16 @@ def favorites(request):
     return render(
         request, 'favorite.html',
         {'recipe_list': recipe_list, 'tags': tags, 'fav': 'fav'})
+
+
+@login_required
+def purchases(request):
+    '''Рецепты пользователя в списке покупок'''
+    recipe_list, tags = filter_tag(request)
+    # получаем id рецептов из списка покупок
+    purchases = Purchase.objects.filter(user=request.user)
+    ids = purchases.values_list('recipe_id', flat=True)
+    recipe_list = recipe_list.filter(id__in=ids)
+    return render(
+        request, 'shopList.html',
+        {'recipe_list': recipe_list, 'tags': tags, 'pur': 'pur'})

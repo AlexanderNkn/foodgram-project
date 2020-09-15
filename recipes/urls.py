@@ -9,5 +9,6 @@ urlpatterns = [
     path('recipes/<username>/', views.profile, name='profile'),
     path('recipes/', views.recipes, name='recipes'),
     path('favorites/', views.favorites, name='favorites'),
+    path('purchases/', views.purchases, name='purchases'),
     path('', views.index, name='index'),
 ]
