@@ -1,23 +1,20 @@
 import functools
 import operator
+from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
+from api.models import Favorite
+
 from .forms import RecipeForm
 from .models import Ingredient, IngredientAmount, Recipe, Tag
 
 
-def index(request):
-    # главная страница редиректит на страницу с рецептами
-    return redirect('recipes')
-
-
 def filter_tag(request):
-    """Функция готовит общую выборку рецептов в зависимости от тега
-    для дальнейшего фильтрования при необходимости.
-    """
+    '''Функция готовит общую выборку рецептов в зависимости от тега
+    для дальнейшего фильтрования при необходимости.'''
     tags = request.GET.get('tags', 1)
     if tags == 1:
         tags = 'bds'
@@ -35,7 +32,8 @@ def filter_tag(request):
 
 
 def get_tag(tags):
-    # функция переводит русские названия в английские
+    '''Функция переводит русские названия в английские. Нужна для
+    корректного отображения тегов при создании и редактировании рецепта.'''
     tag_dict = {
         'Завтрак': 'breakfast',
         'Обед': 'lunch',
@@ -45,7 +43,7 @@ def get_tag(tags):
 
 
 def save_recipe(request, form):
-    # функция сохраняет данные при создании и редактировании рецепта
+    '''Функция сохраняет данные в db при создании и редактировании рецепта.'''
     recipe = form.save(commit=False)
     recipe.author = request.user
     # сохраняем рецепт без тегов и количества ингредиентов
@@ -55,6 +53,9 @@ def save_recipe(request, form):
     tags = form.cleaned_data['tag']
     for tag in tags:
         Tag.objects.create(recipe=recipe, title=tag)
+    # через bulk_create не подтягиваются цвета тегов
+    # objs = [Tag(recipe=recipe, title=tag) for tag in tags]
+    # Tag.objects.bulk_create(objs)
 
     # добавляем количество ингредиентов
     # собираем значения из формы, относящиеся к ингредиентам
@@ -63,7 +64,7 @@ def save_recipe(request, form):
         if 'nameIngredient' in key:
             title.append(value)
         elif 'valueIngredient' in key:
-            amount.append(value)
+            amount.append(Decimal(value.replace(',', '.')))
         elif 'unitsIngredient' in key:
             dimension.append(value)
     # собираем список экземпляров ингредиентов
@@ -77,21 +78,21 @@ def save_recipe(request, form):
         # собираем объекты IngredientAmount для bulk_create
         objs = []
         for i in range(len(ingredient_list)):
-            objs.append(
-                IngredientAmount(
-                    ingredient=ingredient_list[i],
-                    recipe=recipe,
-                    amount=amount[i],
-                )
-            )
+            objs.append(IngredientAmount(ingredient=ingredient_list[i],
+                                         recipe=recipe, amount=amount[i]))
         IngredientAmount.objects.bulk_create(objs)
     except TypeError:
         pass
     return None
 
 
+def index(request):
+    # главная страница редиректит на страницу с рецептами
+    return redirect('recipes')
+
+
 def recipes(request):
-    """Предоставляет список рецептов как для аутентированного пользователя
+    """Предоставляет список рецептов как для аутентифицированного пользователя
     так и для анонима
     """
     recipe_list, tags = filter_tag(request)
@@ -107,6 +108,7 @@ def recipes(request):
             'recipe_list': recipe_list,
             'tags': tags,
             'url': 'recipes',
+            'index': 'index',
         },
     )
 
@@ -124,7 +126,8 @@ def new_recipe(request):
     else:
         form = RecipeForm(request.POST or None)
         tags = []  # при создании рецепта все теги сначала неактивны
-    return render(request, 'formRecipe.html', {'form': form, 'tags': tags})
+    return render(request, 'formRecipe.html',
+                  {'form': form, 'tags': tags, 'new': 'new'})
 
 
 def recipe_view(request, recipe_id):
@@ -183,3 +186,16 @@ def recipe_edit(request, recipe_id):
     return render(
         request, 'formChangeRecipe.html',
         {"form": form, "recipe": recipe, 'tags': tags})
+
+
+@login_required
+def favorites(request):
+    '''Избранные рецепты пользователя'''
+    recipe_list, tags = filter_tag(request)
+    # получаем id избранных рецептов пользователя
+    favorites = Favorite.objects.filter(user=request.user)
+    ids = favorites.values_list('recipe_id', flat=True)
+    recipe_list = recipe_list.filter(id__in=ids)
+    return render(
+        request, 'favorite.html',
+        {'recipe_list': recipe_list, 'tags': tags, 'fav': 'fav'})
