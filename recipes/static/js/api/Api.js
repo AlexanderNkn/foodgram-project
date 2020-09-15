@@ -4,7 +4,7 @@ class Api {
         this.apiUrl =  apiUrl;
     }
   getPurchases () {
-    return fetch(`/api/v1/purchases`, {
+    return fetch(`/api/v1/purchases/`, {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -17,7 +17,7 @@ class Api {
       })
   }
   addPurchases (id) {
-    return fetch(`/api/v1/purchases`, {
+    return fetch(`/api/v1/purchases/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -48,7 +48,7 @@ class Api {
       })
   }
   addSubscriptions(id) {
-    return fetch(`/api/v1/subscriptions`, {
+    return fetch(`/api/v1/subscriptions/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -79,7 +79,7 @@ class Api {
       })
   }
   addFavorites (id)  {
-    return fetch(`/api/v1/favorites`, {
+    return fetch(`/api/v1/favorites/`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
