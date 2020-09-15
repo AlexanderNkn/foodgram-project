@@ -21,7 +21,7 @@ class RecipeForm(forms.ModelForm):
     text = forms.CharField(
         widget=forms.Textarea(attrs={'class': 'form__textarea'})
     )
-    image = forms.ImageField(required=False)
+    image = forms.ImageField()
 
     class Meta:
         model = Recipe
