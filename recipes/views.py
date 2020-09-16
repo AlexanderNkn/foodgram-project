@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.db.models import Q
 from django.shortcuts import redirect, render
 
-from api.models import Favorite, Purchase
+from api.models import Favorite, Purchase, Subscribe
+from users.models import User
 
 from .forms import RecipeForm
 from .models import Ingredient, IngredientAmount, Recipe, Tag
@@ -19,15 +20,12 @@ def filter_tag(request):
     if tags == 1:
         tags = 'bds'
         recipe_list = Recipe.objects.prefetch_related(
-            'author', 'recipe_tag'
-        ).order_by('-pub_date')
+            'author', 'recipe_tag').order_by('-pub_date')
     else:
-        recipe_list = (
-            Recipe.objects.prefetch_related('author', 'recipe_tag')
-            .filter(recipe_tag__slug__in=tags)
-            .distinct()
-            .order_by('-pub_date')
-        )
+        recipe_list = (Recipe.objects.prefetch_related('author', 'recipe_tag')
+                       .filter(recipe_tag__slug__in=tags)
+                       .distinct()
+                       .order_by('-pub_date'))
     return recipe_list, tags
 
 
@@ -50,6 +48,7 @@ def save_recipe(request, form):
     recipe.save()
 
     # добавляем теги
+    # если делать bulk_create, то не подтянутся цвета
     tags = form.cleaned_data['tag']
     for tag in tags:
         Tag.objects.create(recipe=recipe, title=tag)
@@ -101,10 +100,7 @@ def recipes(request):
         if request.user.is_authenticated
         else 'indexNotAuth.html'
     )
-    return render(
-        request,
-        template_name,
-        {
+    return render(request, template_name, {
             'recipe_list': recipe_list,
             'tags': tags,
             'url': 'recipes',
@@ -134,10 +130,7 @@ def recipe_view(request, recipe_id):
     '''Страница индивидуального рецепта'''
     recipe = list(
         Recipe.objects.filter(id=recipe_id).prefetch_related(
-            'author',
-            'recipe_tag',
-        )
-    )[0]
+            'author', 'recipe_tag'))[0]
     template_name = (
         'singlePage.html'
         if request.user.is_authenticated
@@ -212,3 +205,16 @@ def purchases(request):
     return render(
         request, 'shopList.html',
         {'recipe_list': recipe_list, 'tags': tags, 'pur': 'pur'})
+
+
+@login_required
+def subscriptions(request):
+    '''Выдает список авторов, на которых подписан пользователь
+    и рецептов этих авторов.'''
+    author_id_list = Subscribe.objects.filter(
+        user=request.user).values_list('author_id', flat=True)
+    author_list = (User.objects.prefetch_related('recipe_author')
+                   .filter(id__in=author_id_list))
+    return render(
+        request, 'myFollow.html',
+        {'author_list': author_list, 'sub': 'sub'})

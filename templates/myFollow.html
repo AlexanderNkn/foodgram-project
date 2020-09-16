@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Мои подписки{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'pages/myFollow.css' %}">
+{% endblock %}
+{% block header %}{%include 'headerAuth.html' %}{% endblock %}
+{% block content %}
+    <div class="main__header">
+        <h1 class="main__title">Мои подписки</h1>
+    </div>
+    <div class="card-list">
+        {% for author in author_list %}
+        <div class="card-user" data-author="{{ author.id }}">
+            <div class="card-user__header">
+                <h2 class="card-user__title">{{ author.get_full_name }}</h2>
+            </div>
+            <div class="card-user__body">
+                <ul class="card-user__items">
+                    <li class="card-user__item">
+                        {% load thumbnail %}
+                        {% for recipe in author.recipe_author.all %}
+                        {% thumbnail recipe.image "960x500" crop="center" as im %}
+                        <div class="recipe">
+                            <img src="{{ im.url }}" alt="Картинка" class="recipe__image">
+                            <h3 class="recipe__title">{{ recipe.title }}</h3>
+                            <p class="recipe__text"><span class="icon-time"></span> {{ recipe.duration }} мин.</p>
+                        </div>
+                        {% endthumbnail %}
+                        {% endfor %}
+                    </li>
+                    <li class="card-user__item">
+                        <a href="#" class="card-user__link link">Еще 7 рецептов...</a>
+                    </li>
+                </ul>
+            </div>
+            <div class="card-user__footer">
+                {% if author.id in subscribe %}
+                <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
+                {% else %}
+                <button class="button button_style_blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
+                {% endif %}
+            </div> 
+        </div>
+        {% endfor %}
+    </div>
+    <nav class="pagination" aria-label="Search results pages">
+        <ul class="pagination__container">
+            <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
+            <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="#">1</a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#">2</a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#">3</a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#">4</a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#">5</a></li>
+            <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-right"></span></a></li>
+        </ul>
+    </nav>
+{% endblock content %}
+{% block style %}
+<script src="{% static './js/config/config.js' %}"></script>
+<script src="{% static './js/components/MainCards.js' %}"></script>
+<script src="{% static './js/components/MyFollow.js' %}"></script>
+<script src="{% static './js/components/Subscribe.js' %}"></script>
+<script src="{% static './js/components/Header.js' %}"></script>
+<script src="{% static './js/api/Api.js' %}"></script>
+<script src="{% static 'myFollow.js' %}"></script>
+{% endblock style %}

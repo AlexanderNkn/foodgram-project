@@ -12,7 +12,10 @@
         </div>
 <!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
         <div class="author-subscribe" data-author="{{ recipe_list.0.author_id }}">
-            <p style="padding: 0 0 2em 0;"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></p>
+            <p style="padding: 0 0 2em 0;">
+                {% if recipe_list.0.author_id not in subscribe %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
+                {% else %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться</button>
+                {% endif %}</p>
         </div>
         <div class="card-list" >
     {% load thumbnail %}

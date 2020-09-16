@@ -10,5 +10,6 @@ urlpatterns = [
     path('recipes/', views.recipes, name='recipes'),
     path('favorites/', views.favorites, name='favorites'),
     path('purchases/', views.purchases, name='purchases'),
+    path('subscriptions/', views.subscriptions, name='subscriptions'),
     path('', views.index, name='index'),
 ]

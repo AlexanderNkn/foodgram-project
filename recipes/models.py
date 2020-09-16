@@ -100,9 +100,9 @@ class Ingredient(models.Model):
 
 
 class IngredientAmount(models.Model):
-    """Промежуточная модель между моделями ингредиентов и рецептов,
+    '''Промежуточная модель между моделями ингредиентов и рецептов,
     показывает количество ингредиента в конкретном рецепте.
-    """
+    '''
 
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, verbose_name='ингредиент'
