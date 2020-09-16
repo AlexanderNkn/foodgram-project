@@ -8,7 +8,7 @@
     {% include 'headerAuth.html' %}
     {% endblock %}
     {% block content %}
-        <div class="single-card" data-id="{{ recipe.id }}">
+        <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             {% load thumbnail %}
             {% thumbnail recipe.image "960x500" as im %}
             <img src="{{ im.url }}" alt="Картинка" class="single-card__image">
