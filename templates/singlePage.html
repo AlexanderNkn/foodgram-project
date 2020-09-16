@@ -16,7 +16,13 @@
                 <div class="single-card__header-info">
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
                     <div class="single-card__favorite">
+                        {% if request.user != recipe.author %}
+                        {% if recipe.id not in favorite %}
                         <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                        {% elif recipe.id in favorite %}
+                        <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
+                        {% endif %}
+                        {% endif %}
                         <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
                     </div>
                 </div>
@@ -34,7 +40,11 @@
                 </div>
                 <ul class="single-card__items">
                     <li class="single-card__item">
-                        <button class="button button_style_blue" name="purchases" data-out><span class="icon-plus"></span>Добавить в покупки</button>
+                        {% if recipe.id not in purchase %}
+                        <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                        {% else %}
+                        <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
+                        {% endif %}
                         <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
                     </li>
                 </ul>

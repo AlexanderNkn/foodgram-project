@@ -34,10 +34,18 @@
             </div>
         </div>
         <div class="card__footer">
-            <button class="button button_style_light-blue" name="purchases" data-out><span
-                    class="icon-plus button__icon"></span>Добавить в покупки</button>
-            <button class="button button_style_none" name="favorites" data-out><span
-                    class="icon-favorite"></span></button>
+            {% if recipe.id not in purchase %}
+            <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+            {% else %}
+            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
+            {% endif %}
+            {% if request.user != recipe.author %}
+            {% if recipe.id not in favorite %}
+            <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+            {% elif recipe.id in favorite %}
+            <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_active"></span></button>
+            {% endif %}
+            {% endif %}
         </div>
     </div>
     {% endthumbnail %}
