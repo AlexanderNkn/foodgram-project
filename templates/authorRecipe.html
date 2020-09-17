@@ -7,19 +7,19 @@
     {% block header %}{%include 'headerAuth.html' %}{% endblock %}
     {% block content %}
         <div class="main__header">
-            <h1 class="main__title">{{ recipe_list.0.author.get_full_name }}</h1>
+            <h1 class="main__title">{{ page.0.author.get_full_name }}</h1>
             {% include 'filterByTag.html' %}
         </div>
 <!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
-        <div class="author-subscribe" data-author="{{ recipe_list.0.author_id }}">
+        <div class="author-subscribe" data-author="{{ page.0.author_id }}">
             <p style="padding: 0 0 2em 0;">
-                {% if recipe_list.0.author_id not in subscribe %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
+                {% if page.0.author_id not in subscribe %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
                 {% else %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться</button>
                 {% endif %}</p>
         </div>
         <div class="card-list" >
     {% load thumbnail %}
-    {% for recipe in recipe_list %}
+    {% for recipe in page %}
     {% thumbnail recipe.image "960x500" crop="center" as im %}
     <div class="card" data-id="{{ recipe.id }}">
         <a href="{% url 'recipe_view' recipe.id %}" class="link"><img src="{{ im.url }}" alt="Картинка" class="card__image"></a>
@@ -54,17 +54,9 @@
     {% endthumbnail %}
     {% endfor %}
     </div>
-        <nav class="pagination" aria-label="Search results pages">
-            <ul class="pagination__container">
-                <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-left"></span></a></li>
-                <li class="pagination__item pagination__item_active"><a class="pagination__link link" href="#">1</a></li>
-                <li class="pagination__item"><a class="pagination__link link" href="#">2</a></li>
-                <li class="pagination__item"><a class="pagination__link link" href="#">3</a></li>
-                <li class="pagination__item"><a class="pagination__link link" href="#">4</a></li>
-                <li class="pagination__item"><a class="pagination__link link" href="#">5</a></li>
-                <li class="pagination__item"><a class="pagination__link link" href="#"><span class="icon-right"></span></a></li>
-            </ul>
-        </nav>
+    {% if page.has_other_pages %}
+        {% include "paginator.html" with items=page paginator=paginator tags=tags%}
+    {% endif %}
 {% endblock content %}
 {% block style %}
 <script src="{% static './js/components/MainCards.js' %}"></script>
