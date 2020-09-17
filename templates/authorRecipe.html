@@ -4,7 +4,13 @@
 {% block css %}
     <link rel="stylesheet" href="{% static 'pages/index.css' %}">
 {% endblock %}
-    {% block header %}{%include 'headerAuth.html' %}{% endblock %}
+    {% block header %}
+        {% if request.user.is_authenticated %}
+            {%include 'headerAuth.html' %}
+        {% else %}
+            {%include 'headerNotAuth.html' %}
+        {% endif %}
+    {% endblock %}
     {% block content %}
         <div class="main__header">
             <h1 class="main__title">{{ page.0.author.get_full_name }}</h1>
@@ -13,9 +19,11 @@
 <!--        <p style="padding: 0 0 2em 0;"><a class="button button_style_light-blue" href="#">Подписаться на автора</a></p>-->
         <div class="author-subscribe" data-author="{{ page.0.author_id }}">
             <p style="padding: 0 0 2em 0;">
-                {% if page.0.author_id not in subscribe %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
-                {% else %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться</button>
-                {% endif %}</p>
+                {% if request.user.is_authenticated %}
+                    {% if page.0.author_id not in subscribe %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button>
+                        {% else %}<button class="button button_style_light-blue button_size_subscribe" name="subscribe">Отписаться</button>
+                    {% endif %}
+                    {% endif %}</p>
         </div>
         <div class="card-list" >
     {% load thumbnail %}
@@ -37,16 +45,18 @@
             </div>
         </div>
         <div class="card__footer">
+            {% if request.user.is_authenticated %}
             {% if recipe.id not in purchase %}
-            <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
             {% else %}
-            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
+                <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
             {% endif %}
             {% if request.user != recipe.author %}
             {% if recipe.id not in favorite %}
-            <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
             {% elif recipe.id in favorite %}
-            <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_active"></span></button>
+                <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_active"></span></button>
+            {% endif %}
             {% endif %}
             {% endif %}
         </div>

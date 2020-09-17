@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ flatpage.title }}{% endblock %}
+{% block css %}
+<link rel="stylesheet" href="{% static 'pages/index.css' %}">
+{% endblock %}
+{% block header %}
+    {% if request.user.is_authenticated %}
+        {%include 'headerAuth.html' %}
+    {% else %}
+        {%include 'headerNotAuth.html' %}
+    {% endif %}
+{% endblock %}
+{% block content %}
+<div class="main__header">
+    <h1 class="main__title">{{ flatpage.title }}</h1>
+</div>
+<div class="card-list">
+    <div class="custom-center-block">
+        {{ flatpage.content }}
+    </div>
+{% endblock content %}

@@ -23,12 +23,14 @@
                     <p class="single-card__text"><span class="icon-time"></span>{{ recipe.duration }} мин.</p>
                     <p class="single-card__text"><span class="icon-user"></span>{{ recipe.author.get_full_name }}</p>
                 </div>
+                {% if request.user.is_authenticated %}
                 <ul class="single-card__items">
                     <li class="single-card__item">
                         <button class="button button_style_blue" name="purchases" data-out>
                             <span class="icon-plus"></span>Добавить в покупки</button>
                     </li>
                 </ul>
+                {% endif %}
                 <div class="single-card__section">
                     <h3 class="single-card__section-title">Ингредиенты:</h3>
                     <div class="single-card__items single-card__items_column">

@@ -25,6 +25,7 @@ handler500 = 'recipes.views.server_error'  # noqa
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('about/', include('django.contrib.flatpages.urls')),
     path('auth/', include('users.urls')),
     path('auth/', include([
         path('login/', auth_view.LoginView.as_view(
