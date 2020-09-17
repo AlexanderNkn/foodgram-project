@@ -135,7 +135,7 @@ dmypy.json
 media/
 
 # migrations
-migrations/
+# migrations/
 
 # debug-toolbar
 debug-toolbar
