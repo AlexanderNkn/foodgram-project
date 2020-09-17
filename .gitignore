@@ -143,3 +143,5 @@ debug-toolbar
 # additional information
 scratches/
 ingredients.txt
+demo_data/
+static/
