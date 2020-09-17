@@ -13,7 +13,7 @@
         </div>
         <div class="card-list">
             {% load thumbnail %}
-            {% for recipe in recipe_list %}
+            {% for recipe in page %}
             {% thumbnail recipe.image "960x500" crop="center" as im %}
             <div class="card" data-id="{{ recipe.id }}">
                 <a href="{% url 'recipe_view' recipe.id %}" class="link"><img src="{{ im.url }}" alt="Картинка" class="card__image"></a>
@@ -29,9 +29,11 @@
                         <p class="card__text"><span class="icon-user"></span> <a href="{% url 'profile' recipe.author %}" style="color: black">{{ recipe.author.get_full_name }}</a></p>
                     </div>
                 </div>
+                {% if request.user.is_authenticated %}
                 <div class="card__footer">
                     <button class="button button_style_light-blue" name="purchases" data-out><span class="icon-plus button__icon"></span>Добавить в покупки</button>
                 </div>
+                {% endif %}
             </div> 
             {% endthumbnail %}
             {% endfor %}
