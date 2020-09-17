@@ -3,7 +3,9 @@ import operator
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
-from django.db.models import Q
+from django.core.paginator import Paginator
+from django.db.models import Q, Sum
+from django.http import HttpResponse
 from django.shortcuts import redirect, render
 
 from api.models import Favorite, Purchase, Subscribe
@@ -85,23 +87,51 @@ def save_recipe(request, form):
     return None
 
 
+def get_ingredients(request):
+    '''отправляет пользователю текстовый файл со списком ингредиентов.'''
+    # получаем список ингредиентов с их количеством
+    ingredient_list = (Recipe.objects.prefetch_related('ingredient', 'recipe_amount')  # noqa
+                       .filter(recipe_purchase__user=request.user)
+                       .order_by('ingredient__title')
+                       .values('ingredient__title', 'ingredient__dimension')
+                       .annotate(amount=Sum('recipe_amount__amount')))
+    # создаем текстовый файл
+    ingredient_txt = [
+        (f"\u2022 {item['ingredient__title'].capitalize()} "
+         f"({item['ingredient__dimension']}) \u2014 {item['amount']} \n")
+        for item in ingredient_list
+    ]
+    filename = 'ingredients.txt'
+    f = open('ingredients.txt', 'a')
+    f.writelines(ingredient_txt)
+    f.close()
+    # отправляем файл
+    response = HttpResponse(ingredient_txt, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    return response
+
+
 def index(request):
     # главная страница редиректит на страницу с рецептами
     return redirect('recipes')
 
 
 def recipes(request):
-    """Предоставляет список рецептов как для аутентифицированного пользователя
+    '''Предоставляет список рецептов как для аутентифицированного пользователя
     так и для анонима
-    """
+    '''
     recipe_list, tags = filter_tag(request)
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
     template_name = (
         'indexAuth.html'
         if request.user.is_authenticated
         else 'indexNotAuth.html'
     )
     return render(request, template_name, {
-            'recipe_list': recipe_list,
+            'page': page,
+            'paginator': paginator,
             'tags': tags,
             'url': 'recipes',
             'index': 'index',
@@ -143,9 +173,14 @@ def profile(request, username):
     '''Страница с рецептами одного автора'''
     recipe_list, tags = filter_tag(request)
     recipe_list = recipe_list.filter(author__username=username)
-    return render(
-        request, 'authorRecipe.html',
-        {'recipe_list': recipe_list, 'arg': username, 'tags': tags},)
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'authorRecipe.html', {
+            'page': page,
+            'paginator': paginator,
+            'arg': username,
+            'tags': tags})
 
 
 @login_required
@@ -156,7 +191,7 @@ def recipe_edit(request, recipe_id):
     # проверка, что текущий юзер и автор рецепта совпадают
     if request.user != recipe.author:
         return redirect('recipe_view', recipe_id=recipe_id)
-    if request.method == "POST":
+    if request.method == 'POST':
         form = RecipeForm(request.POST or None,
                           files=request.FILES or None, instance=recipe)
         if form.is_valid():
@@ -178,7 +213,7 @@ def recipe_edit(request, recipe_id):
         tags = get_tag(tags_saved)
     return render(
         request, 'formChangeRecipe.html',
-        {"form": form, "recipe": recipe, 'tags': tags})
+        {'form': form, 'recipe': recipe, 'tags': tags})
 
 
 @login_required
@@ -189,9 +224,14 @@ def favorites(request):
     favorites = Favorite.objects.filter(user=request.user)
     ids = favorites.values_list('recipe_id', flat=True)
     recipe_list = recipe_list.filter(id__in=ids)
-    return render(
-        request, 'favorite.html',
-        {'recipe_list': recipe_list, 'tags': tags, 'fav': 'fav'})
+    paginator = Paginator(recipe_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
+    return render(request, 'favorite.html', {
+        'page': page,
+        'paginator': paginator,
+        'tags': tags,
+        'fav': 'fav'})
 
 
 @login_required
@@ -215,6 +255,9 @@ def subscriptions(request):
         user=request.user).values_list('author_id', flat=True)
     author_list = (User.objects.prefetch_related('recipe_author')
                    .filter(id__in=author_id_list))
+    paginator = Paginator(author_list, 6)
+    page_number = request.GET.get('page')
+    page = paginator.get_page(page_number)
     return render(
         request, 'myFollow.html',
-        {'author_list': author_list, 'sub': 'sub'})
+        {'page': page, 'paginator': paginator, 'sub': 'sub'})
