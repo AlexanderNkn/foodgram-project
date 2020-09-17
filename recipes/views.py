@@ -6,7 +6,8 @@ from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Q, Sum
 from django.http import HttpResponse
-from django.shortcuts import redirect, render
+from django.shortcuts import redirect, render, get_object_or_404
+from django.views.decorators.csrf import requires_csrf_token
 
 from api.models import Favorite, Purchase, Subscribe
 from users.models import User
@@ -158,9 +159,7 @@ def new_recipe(request):
 
 def recipe_view(request, recipe_id):
     '''Страница индивидуального рецепта'''
-    recipe = list(
-        Recipe.objects.filter(id=recipe_id).prefetch_related(
-            'author', 'recipe_tag'))[0]
+    recipe = get_object_or_404(Recipe, id=recipe_id)
     template_name = (
         'singlePage.html'
         if request.user.is_authenticated
@@ -261,3 +260,15 @@ def subscriptions(request):
     return render(
         request, 'myFollow.html',
         {'page': page, 'paginator': paginator, 'sub': 'sub'})
+
+
+@requires_csrf_token
+def page_not_found(request, exception):
+    '''Обработчик ошибки 404'''
+    return render(request, "misc/404.html", {"path": request.path}, status=404)
+
+
+@requires_csrf_token
+def server_error(request):
+    '''Обработчик ошибки 500'''
+    return render(request, "misc/500.html", status=500)
