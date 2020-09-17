@@ -185,8 +185,7 @@ def profile(request, username):
 @login_required
 def recipe_edit(request, recipe_id):
     '''Редактирование рецепта'''
-    recipe = list(Recipe.objects.filter(id=recipe_id)
-                  .prefetch_related('author', 'recipe_tag'))[0]
+    recipe = get_object_or_404(Recipe, id=recipe_id)
     # проверка, что текущий юзер и автор рецепта совпадают
     if request.user != recipe.author:
         return redirect('recipe_view', recipe_id=recipe_id)
@@ -213,6 +212,16 @@ def recipe_edit(request, recipe_id):
     return render(
         request, 'formChangeRecipe.html',
         {'form': form, 'recipe': recipe, 'tags': tags})
+
+
+@login_required
+def recipe_delete(request, recipe_id):
+    '''Уделение рецепта'''
+    recipe = get_object_or_404(Recipe, id=recipe_id)
+    if request.user == recipe.author:
+        recipe.delete()
+        return redirect('profile', username=request.user.username)
+    return redirect('index')
 
 
 @login_required
