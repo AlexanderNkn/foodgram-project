@@ -45,10 +45,12 @@
                         {% else %}
                         <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
                         {% endif %}
-                        {% if recipe.author.id not in subscribe %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
-                        {% else %}
-                        <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" >Отписаться</button></li>
+                        {% if recipe.author != request.user %}
+                            {% if recipe.author.id not in subscribe %}
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
+                            {% else %}
+                            <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" >Отписаться</button></li>
+                            {% endif %}
                         {% endif %}
                     </li>
                 </ul>
