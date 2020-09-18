@@ -1,10 +1,8 @@
-import functools
-import operator
 from decimal import Decimal
 
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
-from django.db.models import Q, Sum
+from django.db.models import Sum
 from django.http import HttpResponse
 from django.shortcuts import redirect, render, get_object_or_404
 from django.views.decorators.csrf import requires_csrf_token
@@ -60,31 +58,21 @@ def save_recipe(request, form):
     # Tag.objects.bulk_create(objs)
 
     # добавляем количество ингредиентов
-    # собираем значения из формы, относящиеся к ингредиентам
-    title, amount, dimension = [], [], []
+    objs = []  # объекты для bulk_create
     for key, value in form.data.items():
         if 'nameIngredient' in key:
-            title.append(value)
+            title = value
         elif 'valueIngredient' in key:
-            amount.append(Decimal(value.replace(',', '.')))
+            amount = Decimal(value.replace(',', '.'))
         elif 'unitsIngredient' in key:
-            dimension.append(value)
-    # собираем список экземпляров ингредиентов
-    try:
-        query = functools.reduce(
-            operator.or_,
-            (Q(title=t, dimension=d) for t, d in zip(title, dimension)),
-        )
-        ingredient_list = Ingredient.objects.filter(query)
-
-        # собираем объекты IngredientAmount для bulk_create
-        objs = []
-        for i in range(len(ingredient_list)):
-            objs.append(IngredientAmount(ingredient=ingredient_list[i],
-                                         recipe=recipe, amount=amount[i]))
-        IngredientAmount.objects.bulk_create(objs)
-    except TypeError:
-        pass
+            dimension = value
+            # получаем экземпляр ингредиента
+            # и собираем объекты IngredientAmount
+            ing = Ingredient.objects.get(title=title, dimension=dimension)
+            objs.append(
+                IngredientAmount(ingredient=ing, recipe=recipe, amount=amount)
+            )
+    IngredientAmount.objects.bulk_create(objs)
     return None
 
 
