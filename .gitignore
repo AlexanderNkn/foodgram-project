@@ -145,3 +145,6 @@ scratches/
 ingredients.txt
 demo_data/
 static/
+
+# custom env
+.env.prod
