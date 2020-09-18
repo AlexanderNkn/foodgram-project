@@ -5,11 +5,7 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql/data/
     env_file:
-      - ./foodgram/settings/.env.prod
-    environment:
-      - POSTGRES_USER=foodgram
-      - POSTGRES_PASSWORD=foodgram
-      - POSTGRES_DB=foodgram_prod
+      - ./foodgram/settings/.env.prod.db
   web:
     image: foodgram:v1.4
     build: .
@@ -17,12 +13,20 @@ services:
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:
       - static_volume:/usr/src/app/static/
-    ports:
-      - 8000:8000
+    expose:
+      - 8000
     depends_on:
       - db
     env_file:
       - ./foodgram/settings/.env.prod
+  nginx:
+    build: ./nginx
+    volumes:
+      - static_volume:/usr/src/app/static/
+    ports:
+      - 8000:80
+    depends_on:
+      - web
 volumes:
   static_volume:
   postgres_data:
