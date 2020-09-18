@@ -1,0 +1,28 @@
+version: '3.8'
+services:
+  db:
+    image: postgres:12.0-alpine
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    env_file:
+      - ./foodgram/settings/.env.prod
+    environment:
+      - POSTGRES_USER=foodgram
+      - POSTGRES_PASSWORD=foodgram
+      - POSTGRES_DB=foodgram_prod
+  web:
+    image: foodgram:v1.4
+    build: .
+    restart: always
+    command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
+    volumes:
+      - static_volume:/usr/src/app/static/
+    ports:
+      - 8000:8000
+    depends_on:
+      - db
+    env_file:
+      - ./foodgram/settings/.env.prod
+volumes:
+  static_volume:
+  postgres_data:

@@ -17,9 +17,9 @@ def get_ingredients(apps, schema_editor):
     try:
         obj_list = [
             Ingredient(
-                id=id,
-                title=row[0],
-                dimension='г' if row[1] == '' else row[1],
+                id=row[0],
+                title=row[1],
+                dimension='г' if row[2] == '' else row[2],
             )
             for id, row in enumerate(data)
         ]
