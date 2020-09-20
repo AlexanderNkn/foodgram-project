@@ -35,7 +35,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: yspresi/foodgram
-          push: true
           tags: user/app:latest
   deploy:
     runs-on: ubuntu-20.04
