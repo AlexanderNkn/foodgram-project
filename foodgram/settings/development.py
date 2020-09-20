@@ -3,9 +3,11 @@ from .base import * # noqa
 
 DEBUG = True
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "130.193.37.251",
+    'localhost',
+    '127.0.0.1',
+    '130.193.37.251',
+    'my-foodgram.ml',
+    'www.my-foodgram.ml',
 ]
 STATICFILES_DIR = os.path.join(BASE_DIR, 'static') # noqa
 

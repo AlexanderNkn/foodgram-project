@@ -38,9 +38,11 @@ SECRET_KEY = env('SECRET_KEY')
 DEBUG = env('DEBUG')
 
 ALLOWED_HOSTS = [
-    "localhost",
-    "127.0.0.1",
-    "130.193.37.251",
+    'localhost',
+    '127.0.0.1',
+    '130.193.37.251',
+    'my-foodgram.ml',
+    'www.my-foodgram.ml',
 ]
 
 # custom User model
