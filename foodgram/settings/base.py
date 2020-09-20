@@ -37,7 +37,11 @@ SECRET_KEY = env('SECRET_KEY')
 # False if not in os.environ
 DEBUG = env('DEBUG')
 
-ALLOWED_HOSTS = ['example.com']
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "130.193.37.251",
+]
 
 # custom User model
 AUTH_USER_MODEL = 'users.User'
@@ -58,9 +62,11 @@ INSTALLED_APPS = [
     'recipes.apps.RecipesConfig',
     'sorl.thumbnail',
     'rest_framework',
+    'debug_toolbar',
 ]
 
 MIDDLEWARE = [
+    'debug_toolbar.middleware.DebugToolbarMiddleware',
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',

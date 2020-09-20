@@ -2,16 +2,14 @@ from .base import * # noqa
 
 
 DEBUG = True
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "localhost",
+    "127.0.0.1",
+    "130.193.37.251",
+]
 STATICFILES_DIR = os.path.join(BASE_DIR, 'static') # noqa
 
 # settings for debug-toolbar
-INSTALLED_APPS += [ # noqa
-    "debug_toolbar",
-]
-MIDDLEWARE += [ # noqa
-    "debug_toolbar.middleware.DebugToolbarMiddleware",
-]
 INTERNAL_IPS = [
     "127.0.0.1",
 ]

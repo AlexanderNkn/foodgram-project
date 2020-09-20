@@ -144,7 +144,8 @@ debug-toolbar
 scratches/
 ingredients.txt
 demo_data/
-
+foodgram_versions.txt
+ya_cloud
 
 # custom env
 .env.prod

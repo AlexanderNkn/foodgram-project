@@ -27,5 +27,7 @@ main/
 scratches/
 recipes/static/used_templates/
 ingredients.txt
-.github
-.pytets_cache
+.github/
+.pytets_cache/
+foodgram_versions.txt
+ya_cloud/
