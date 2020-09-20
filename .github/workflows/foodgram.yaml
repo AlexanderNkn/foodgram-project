@@ -35,7 +35,8 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
           repository: yspresi/foodgram
-          tag_with_ref: true
+          push: true
+          tags: user/app:latest
   deploy:
     runs-on: ubuntu-20.04
     needs: push_to_docker_hub
