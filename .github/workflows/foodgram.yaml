@@ -50,5 +50,4 @@ jobs:
         passphrase: ${{ secrets.PASSPHRASE }}
         script: |
           sudo docker pull yspresi/foodgram
-          sudo docker stop $(docker ps -a -q)
-          sudo docker run --rm -d -p 8000:8000 yspresi/foodgram:latest
+          

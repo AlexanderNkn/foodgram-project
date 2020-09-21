@@ -7,9 +7,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
   web:
     container_name: foodgram
-    image: "yspresi/foodgram:v3.9"
-    environment:
-      - DEBUG=False
+    image: "yspresi/foodgram:v4.4"
     restart: always
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:
