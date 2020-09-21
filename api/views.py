@@ -12,6 +12,16 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
                           PurchaseSerializer, SubscribeSerializer)
 
 
+class CreateResponseMixin:
+    """Переопределяет стандартный ответ в Response для соответствия Api.js."""
+    def create(self, request, *args, **kwargs):
+        serializer = self.get_serializer(data=request.data)
+        if serializer.is_valid():
+            self.perform_create(serializer)
+            return Response({"success": True})
+        return Response({"success": False})
+
+
 class IngredientAPIView(generics.ListAPIView):
     """Предоставляет поиск в базе ингредиентов по их названиям."""
     queryset = Ingredient.objects.all()
@@ -20,19 +30,11 @@ class IngredientAPIView(generics.ListAPIView):
     search_fields = ['^title', ]
 
 
-class FavoriteAdd(generics.CreateAPIView):
+class FavoriteAdd(CreateResponseMixin, generics.CreateAPIView):
     """Добавляет рецепт в избранное."""
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        # переопределяет ответ в response для соответствия Api.js
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            return Response({"success": True})
-        return Response({"success": False})
 
 
 class FavoriteDelete(APIView):
@@ -44,24 +46,16 @@ class FavoriteDelete(APIView):
         # удалить объект из Favorite
         recipe = get_object_or_404(Recipe, id=id)
         favorite = recipe.recipe_favorite.filter(user=request.user)
-        if favorite:
-            favorite.delete()
+        if favorite.delete():
             return Response({"success": True})
         return Response({"success": False})
 
 
-class PurchaseAdd(generics.CreateAPIView):
+class PurchaseAdd(CreateResponseMixin, generics.CreateAPIView):
     """Добавляет рецепт в список покупок."""
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
     permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            return Response({"success": True})
-        return Response({"success": False})
 
 
 class PurchaseDelete(APIView):
@@ -70,24 +64,16 @@ class PurchaseDelete(APIView):
     def delete(self, request, id):
         recipe = get_object_or_404(Recipe, id=id)
         purchase = recipe.recipe_purchase.filter(user=request.user)
-        if purchase:
-            purchase.delete()
+        if purchase.delete():
             return Response({"success": True})
         return Response({"success": False})
 
 
-class SubscribeAdd(generics.CreateAPIView):
+class SubscribeAdd(CreateResponseMixin, generics.CreateAPIView):
     """Подписывает пользователя на автора."""
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
     permission_classes = [IsAuthenticated]
-
-    def create(self, request, *args, **kwargs):
-        serializer = self.get_serializer(data=request.data)
-        if serializer.is_valid():
-            self.perform_create(serializer)
-            return Response({"success": True})
-        return Response({"success": False})
 
 
 class SubscribeDelete(APIView):
@@ -97,7 +83,6 @@ class SubscribeDelete(APIView):
     def delete(self, request, id):
         author = get_object_or_404(User, id=id)
         subscribe = author.following.filter(user=request.user)
-        if subscribe:
-            subscribe.delete()
+        if subscribe.delete():
             return Response({"success": True})
         return Response({"success": False})
