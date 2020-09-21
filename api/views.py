@@ -55,6 +55,7 @@ class PurchaseAdd(generics.CreateAPIView):
     '''Добавляет рецепт в список покупок'''
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
+    permission_classes = [IsAuthenticated]
 
     def create(self, request, *args, **kwargs):
         serializer = self.get_serializer(data=request.data)
