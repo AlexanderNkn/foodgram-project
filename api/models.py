@@ -8,9 +8,7 @@ User = get_user_model()
 
 
 class Favorite(models.Model):
-    '''
-    Класс добавляет понравивишиеся рецепты в избранное.
-    '''
+    """Класс добавляет понравивишиеся рецепты в избранное."""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -40,9 +38,7 @@ class Favorite(models.Model):
 
 
 class Subscribe(models.Model):
-    '''
-    Класс создает подписку на понравившегося автора.
-    '''
+    """Класс создает подписку на понравившегося автора."""
 
     author = models.ForeignKey(
         User,
@@ -73,11 +69,8 @@ class Subscribe(models.Model):
 
 
 class Purchase(models.Model):
-    '''
-    Класс собирает выбранные рецепты для последующего
-    формирования списка ингериентов для покупки.
-    '''
-
+    """Класс собирает выбранные рецепты для последующего
+    формирования списка ингериентов для покупки."""
     user = models.ForeignKey(
         User,
         on_delete=models.CASCADE,

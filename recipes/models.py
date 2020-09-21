@@ -11,10 +11,7 @@ User = get_user_model()
 
 
 class Recipe(models.Model):
-    """
-    Модель рецептов пользователя.
-    """
-
+    """Модель рецептов пользователя."""
     author = models.ForeignKey(
         User,
         on_delete=models.CASCADE,
@@ -82,7 +79,7 @@ class Recipe(models.Model):
 
 
 class Ingredient(models.Model):
-    '''Модель ингредиентов в рецепте.'''
+    """Модель ингредиентов в рецепте."""
 
     title = models.CharField(
         'название ингредиента', max_length=128, db_index=True
@@ -100,9 +97,9 @@ class Ingredient(models.Model):
 
 
 class IngredientAmount(models.Model):
-    '''Промежуточная модель между моделями ингредиентов и рецептов,
+    """Промежуточная модель между моделями ингредиентов и рецептов,
     показывает количество ингредиента в конкретном рецепте.
-    '''
+    """
 
     ingredient = models.ForeignKey(
         Ingredient, on_delete=models.CASCADE, verbose_name='ингредиент'
@@ -121,7 +118,7 @@ class IngredientAmount(models.Model):
 
 
 class Tag(models.Model):
-    '''Модель тегов'''
+    """Модель тегов"""
 
     TAG_CHOICES = (
         ('Завтрак', 'Завтрак'),

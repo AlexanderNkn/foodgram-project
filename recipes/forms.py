@@ -4,7 +4,7 @@ from .models import Recipe
 
 
 class RecipeForm(forms.ModelForm):
-    '''Класс формы для создания рецепта'''
+    """Класс формы для создания рецепта."""
 
     TAG_CHOICES = (
         ('Завтрак', 'Завтрак'),

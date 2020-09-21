@@ -15,8 +15,8 @@ from .models import Ingredient, IngredientAmount, Recipe, Tag
 
 
 def filter_tag(request):
-    '''Функция готовит общую выборку рецептов в зависимости от тега
-    для дальнейшего фильтрования при необходимости.'''
+    """Функция готовит общую выборку рецептов в зависимости от тега
+    для дальнейшего фильтрования при необходимости."""
     tags = request.GET.get('tags', 'bds')
     recipe_list = Recipe.objects.prefetch_related(
         'author', 'recipe_tag'
@@ -28,8 +28,8 @@ def filter_tag(request):
 
 
 def get_tag(tags):
-    '''Функция переводит русские названия в английские. Нужна для
-    корректного отображения тегов при создании и редактировании рецепта.'''
+    """Функция переводит русские названия в английские. Нужна для
+    корректного отображения тегов при создании и редактировании рецепта."""
     tag_dict = {
         'Завтрак': 'breakfast',
         'Обед': 'lunch',
@@ -39,7 +39,7 @@ def get_tag(tags):
 
 
 def save_recipe(request, form):
-    '''Функция сохраняет данные в db при создании и редактировании рецепта.'''
+    """Функция сохраняет данные в db при создании и редактировании рецепта."""
     recipe = form.save(commit=False)
     recipe.author = request.user
     # сохраняем рецепт без тегов и количества ингредиентов
@@ -74,7 +74,7 @@ def save_recipe(request, form):
 
 
 def get_ingredients(request):
-    '''отправляет пользователю текстовый файл со списком ингредиентов.'''
+    """отправляет пользователю текстовый файл со списком ингредиентов."""
     # получаем список ингредиентов с их количеством
     ingredient_list = (Recipe.objects.prefetch_related('ingredient', 'recipe_amount')  # noqa
                        .filter(recipe_purchase__user=request.user)
@@ -100,9 +100,8 @@ def index(request):
 
 
 def recipes(request):
-    '''Предоставляет список рецептов как для аутентифицированного пользователя
-    так и для анонима
-    '''
+    """Предоставляет список рецептов как для аутентифицированного пользователя
+    так и для анонима."""
     recipe_list, tags = filter_tag(request)
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
@@ -124,7 +123,7 @@ def recipes(request):
 
 @login_required
 def new_recipe(request):
-    '''Создание нового рецепта'''
+    """Создание нового рецепта."""
     if request.method == 'POST':
         form = RecipeForm(request.POST or None, files=request.FILES or None)
         if form.is_valid():
@@ -140,7 +139,7 @@ def new_recipe(request):
 
 
 def recipe_view(request, recipe_id):
-    '''Страница индивидуального рецепта'''
+    """Страница индивидуального рецепта."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     template_name = (
         'singlePage.html'
@@ -151,7 +150,7 @@ def recipe_view(request, recipe_id):
 
 
 def profile(request, username):
-    '''Страница с рецептами одного автора'''
+    """Страница с рецептами одного автора."""
     recipe_list, tags = filter_tag(request)
     recipe_list = recipe_list.filter(author__username=username)
     paginator = Paginator(recipe_list, 6)
@@ -166,7 +165,7 @@ def profile(request, username):
 
 @login_required
 def recipe_edit(request, recipe_id):
-    '''Редактирование рецепта'''
+    """Редактирование рецепта."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     # проверка, что текущий юзер и автор рецепта совпадают
     if request.user != recipe.author:
@@ -198,7 +197,7 @@ def recipe_edit(request, recipe_id):
 
 @login_required
 def recipe_delete(request, recipe_id):
-    '''Уделение рецепта'''
+    """Уделение рецепта."""
     recipe = get_object_or_404(Recipe, id=recipe_id)
     if request.user == recipe.author:
         recipe.delete()
@@ -208,7 +207,7 @@ def recipe_delete(request, recipe_id):
 
 @login_required
 def favorites(request):
-    '''Избранные рецепты пользователя'''
+    """Избранные рецепты пользователя."""
     recipe_list, tags = filter_tag(request)
     # получаем id избранных рецептов пользователя
     favorites = Favorite.objects.filter(user=request.user)
@@ -226,7 +225,7 @@ def favorites(request):
 
 @login_required
 def purchases(request):
-    '''Рецепты пользователя в списке покупок'''
+    """Рецепты пользователя в списке покупок."""
     recipe_list, tags = filter_tag(request)
     # получаем id рецептов из списка покупок
     purchases = Purchase.objects.filter(user=request.user)
@@ -239,8 +238,8 @@ def purchases(request):
 
 @login_required
 def subscriptions(request):
-    '''Выдает список авторов, на которых подписан пользователь
-    и рецептов этих авторов.'''
+    """Выдает список авторов, на которых подписан пользователь
+    и рецептов этих авторов."""
     author_id_list = Subscribe.objects.filter(
         user=request.user).values_list('author_id', flat=True)
     author_list = (User.objects.prefetch_related('recipe_author')
@@ -255,11 +254,11 @@ def subscriptions(request):
 
 @requires_csrf_token
 def page_not_found(request, exception):
-    '''Обработчик ошибки 404'''
+    """Обработчик ошибки 404."""
     return render(request, "misc/404.html", {"path": request.path}, status=404)
 
 
 @requires_csrf_token
 def server_error(request):
-    '''Обработчик ошибки 500'''
+    """Обработчик ошибки 500."""
     return render(request, "misc/500.html", status=500)

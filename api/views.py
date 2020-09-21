@@ -13,8 +13,7 @@ from .serializers import (FavoriteSerializer, IngredientSerializer,
 
 
 class IngredientAPIView(generics.ListAPIView):
-    '''Предоставляет поиск в базе ингредиентов по их названиям.
-    '''
+    """Предоставляет поиск в базе ингредиентов по их названиям."""
     queryset = Ingredient.objects.all()
     serializer_class = IngredientSerializer
     filter_backends = [filters.SearchFilter]
@@ -22,7 +21,7 @@ class IngredientAPIView(generics.ListAPIView):
 
 
 class FavoriteAdd(generics.CreateAPIView):
-    '''Добавляет рецепт в избранное'''
+    """Добавляет рецепт в избранное."""
     queryset = Favorite.objects.all()
     serializer_class = FavoriteSerializer
     permission_classes = [IsAuthenticated]
@@ -37,7 +36,7 @@ class FavoriteAdd(generics.CreateAPIView):
 
 
 class FavoriteDelete(APIView):
-    '''Удаляет рецепт из избранного'''
+    """Удаляет рецепт из избранного."""
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, id):
@@ -52,7 +51,7 @@ class FavoriteDelete(APIView):
 
 
 class PurchaseAdd(generics.CreateAPIView):
-    '''Добавляет рецепт в список покупок'''
+    """Добавляет рецепт в список покупок."""
     queryset = Purchase.objects.all()
     serializer_class = PurchaseSerializer
     permission_classes = [IsAuthenticated]
@@ -66,7 +65,7 @@ class PurchaseAdd(generics.CreateAPIView):
 
 
 class PurchaseDelete(APIView):
-    '''Удаляет рецепт из списка покупок'''
+    """Удаляет рецепт из списка покупок."""
 
     def delete(self, request, id):
         recipe = get_object_or_404(Recipe, id=id)
@@ -78,7 +77,7 @@ class PurchaseDelete(APIView):
 
 
 class SubscribeAdd(generics.CreateAPIView):
-    '''Подписывает пользователя на автора'''
+    """Подписывает пользователя на автора."""
     queryset = Subscribe.objects.all()
     serializer_class = SubscribeSerializer
     permission_classes = [IsAuthenticated]
@@ -92,7 +91,7 @@ class SubscribeAdd(generics.CreateAPIView):
 
 
 class SubscribeDelete(APIView):
-    '''Удаляет подписку пользователя на автора'''
+    """Удаляет подписку пользователя на автора."""
     permission_classes = [IsAuthenticated]
 
     def delete(self, request, id):

@@ -8,7 +8,7 @@ from .models import Favorite, Purchase, Subscribe
 
 
 class FavoriteSerializer(serializers.ModelSerializer):
-    '''Сериализатор для рецептов в избранном.'''
+    """Сериализатор для рецептов в избранном."""
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=Recipe.objects.all(), source='recipe')
@@ -18,8 +18,8 @@ class FavoriteSerializer(serializers.ModelSerializer):
         model = Favorite
 
     def validate_id(self, value):
-        '''Проверяет, не добавлен ли уже рецепт в избранное, либо не пытается
-        ли пользователь добавить в избранное свой рецепт.'''
+        """Проверяет, не добавлен ли уже рецепт в избранное, либо не пытается
+        ли пользователь добавить в избранное свой рецепт."""
         user = self.context['request'].user
         if user == value.author:
             raise ValidationError(
@@ -35,7 +35,7 @@ class FavoriteSerializer(serializers.ModelSerializer):
 
 
 class PurchaseSerializer(serializers.ModelSerializer):
-    '''Сериализатор для рецептов в списке покупок.'''
+    """Сериализатор для рецептов в списке покупок."""
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=Recipe.objects.all(), source='recipe')
@@ -45,7 +45,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
         model = Purchase
 
     def validate_id(self, value):
-        '''Проверяет, не добавлен ли уже рецепт в список покупок.'''
+        """Проверяет, не добавлен ли уже рецепт в список покупок."""
         user = self.context['request'].user
         if Purchase.objects.filter(user=user, recipe=value).exists():
             raise ValidationError(
@@ -59,7 +59,7 @@ class PurchaseSerializer(serializers.ModelSerializer):
 
 
 class SubscribeSerializer(serializers.ModelSerializer):
-    '''Сериализатор для управления подписками'''
+    """Сериализатор для управления подписками."""
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=User.objects.all(), source='author')
@@ -69,10 +69,8 @@ class SubscribeSerializer(serializers.ModelSerializer):
         model = Subscribe
 
     def validate_id(self, value):
-        '''
-        Проверяет, не подписан ли уже пользователь на этого автора,
-        либо не пытается ли пользователь подписаться сам на себя.
-        '''
+        """Проверяет, не подписан ли уже пользователь на этого автора,
+        либо не пытается ли пользователь подписаться сам на себя."""
         user = self.context['request'].user
         if Subscribe.objects.filter(user=user, author=value).exists():
             raise ValidationError('Вы уже подписаны на этого автора')
@@ -87,7 +85,7 @@ class SubscribeSerializer(serializers.ModelSerializer):
 
 
 class IngredientSerializer(serializers.ModelSerializer):
-    '''Сериализатор для списка ингредиентов'''
+    """Сериализатор для списка ингредиентов."""
 
     class Meta:
         fields = '__all__'
