@@ -1,5 +1,6 @@
 from rest_framework import serializers
 from rest_framework.exceptions import ValidationError
+from rest_framework.validators import UniqueTogetherValidator
 
 from recipes.models import Ingredient, Recipe
 from users.models import User
@@ -16,16 +17,20 @@ class FavoriteSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id']
         model = Favorite
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Favorite.objects.all(),
+                fields=['id']
+            )
+        ]
 
     def validate_id(self, value):
-        """Проверяет, не добавлен ли уже рецепт в избранное, либо не пытается
-        ли пользователь добавить в избранное свой рецепт."""
+        """Проверяет, не пытается ли пользователь добавить в избранное свой
+        рецепт."""
         user = self.context['request'].user
         if user == value.author:
             raise ValidationError(
                 'Вы не можете добавить в избранное свой рецепт')
-        elif Favorite.objects.filter(user=user, recipe=value).exists():
-            raise ValidationError('Вы уже добавили этот рецепт в избранное')
         return value
 
     def create(self, validated_data):
@@ -43,14 +48,12 @@ class PurchaseSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id']
         model = Purchase
-
-    def validate_id(self, value):
-        """Проверяет, не добавлен ли уже рецепт в список покупок."""
-        user = self.context['request'].user
-        if Purchase.objects.filter(user=user, recipe=value).exists():
-            raise ValidationError(
-                'Вы уже добавили этот рецепт в список покупок')
-        return value
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Purchase.objects.all(),
+                fields=['id']
+            )
+        ]
 
     def create(self, validated_data):
         if 'user' not in validated_data:
@@ -67,14 +70,17 @@ class SubscribeSerializer(serializers.ModelSerializer):
     class Meta:
         fields = ['id']
         model = Subscribe
+        validators = [
+            UniqueTogetherValidator(
+                queryset=Subscribe.objects.all(),
+                fields=['id']
+            )
+        ]
 
     def validate_id(self, value):
-        """Проверяет, не подписан ли уже пользователь на этого автора,
-        либо не пытается ли пользователь подписаться сам на себя."""
+        """Проверяет, не пытается ли пользователь подписаться сам на себя."""
         user = self.context['request'].user
-        if Subscribe.objects.filter(user=user, author=value).exists():
-            raise ValidationError('Вы уже подписаны на этого автора')
-        elif user == value:
+        if user == value:
             raise ValidationError('Вы не можете подписаться на себя')
         return value
 
