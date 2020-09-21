@@ -32,8 +32,8 @@ class FavoriteAdd(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
 
 
 class FavoriteDelete(APIView):
@@ -47,8 +47,8 @@ class FavoriteDelete(APIView):
         favorite = recipe.recipe_favorite.filter(user=request.user)
         if favorite:
             favorite.delete()
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
 
 
 class PurchaseAdd(generics.CreateAPIView):
@@ -60,8 +60,8 @@ class PurchaseAdd(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
 
 
 class PurchaseDelete(APIView):
@@ -72,8 +72,8 @@ class PurchaseDelete(APIView):
         purchase = recipe.recipe_purchase.filter(user=request.user)
         if purchase:
             purchase.delete()
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
 
 
 class SubscribeAdd(generics.CreateAPIView):
@@ -86,8 +86,8 @@ class SubscribeAdd(generics.CreateAPIView):
         serializer = self.get_serializer(data=request.data)
         if serializer.is_valid():
             self.perform_create(serializer)
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
 
 
 class SubscribeDelete(APIView):
@@ -99,5 +99,5 @@ class SubscribeDelete(APIView):
         subscribe = author.following.filter(user=request.user)
         if subscribe:
             subscribe.delete()
-            return Response({"success": "true"})
-        return Response({"success": "false"})
+            return Response({"success": True})
+        return Response({"success": False})
