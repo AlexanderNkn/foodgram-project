@@ -142,7 +142,6 @@ debug-toolbar
 
 # additional information
 scratches/
-ingredients.txt
 demo_data/
 foodgram_versions.txt
 ya_cloud

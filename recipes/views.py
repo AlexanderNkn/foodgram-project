@@ -17,16 +17,13 @@ from .models import Ingredient, IngredientAmount, Recipe, Tag
 def filter_tag(request):
     '''Функция готовит общую выборку рецептов в зависимости от тега
     для дальнейшего фильтрования при необходимости.'''
-    tags = request.GET.get('tags', 1)
-    if tags == 1:
-        tags = 'bds'
-        recipe_list = Recipe.objects.prefetch_related(
-            'author', 'recipe_tag').order_by('-pub_date')
-    else:
-        recipe_list = (Recipe.objects.prefetch_related('author', 'recipe_tag')
-                       .filter(recipe_tag__slug__in=tags)
-                       .distinct()
-                       .order_by('-pub_date'))
+    tags = request.GET.get('tags', 'bds')
+    recipe_list = Recipe.objects.prefetch_related(
+        'author', 'recipe_tag'
+        ).filter(
+        recipe_tag__slug__in=tags
+        ).distinct(
+        ).order_by('-pub_date')
     return recipe_list, tags
 
 
@@ -84,17 +81,14 @@ def get_ingredients(request):
                        .order_by('ingredient__title')
                        .values('ingredient__title', 'ingredient__dimension')
                        .annotate(amount=Sum('recipe_amount__amount')))
-    # создаем текстовый файл
+    # готовим текстовое сообщения из списка ингредиентов
     ingredient_txt = [
         (f"\u2022 {item['ingredient__title'].capitalize()} "
          f"({item['ingredient__dimension']}) \u2014 {item['amount']} \n")
         for item in ingredient_list
     ]
     filename = 'ingredients.txt'
-    f = open('ingredients.txt', 'a')
-    f.writelines(ingredient_txt)
-    f.close()
-    # отправляем файл
+    # отправляем файл без сохрания на диске
     response = HttpResponse(ingredient_txt, content_type='text/plain')
     response['Content-Disposition'] = f'attachment; filename={filename}'
     return response

@@ -26,7 +26,6 @@ sent_emails/
 main/
 scratches/
 recipes/static/used_templates/
-ingredients.txt
 .github/
 .pytets_cache/
 foodgram_versions.txt
