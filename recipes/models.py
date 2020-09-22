@@ -50,7 +50,7 @@ class Recipe(models.Model):
         value = self.title
         slug_candidate = slug_original = slugify(value, allow_unicode=True)[
             :max_length
-        ]  # noqa
+        ]
         for i in itertools.count(1):
             if not Recipe.objects.filter(slug=slug_candidate).exists():
                 break
@@ -69,8 +69,7 @@ class Recipe(models.Model):
             return mark_safe(
                 f'<img width="90" height="50" src="{self.image.url}" />'
             )
-        else:
-            return f'Без изображения'  # noqa
+            return 'Без изображения'
 
     def __str__(self):
         return self.title
@@ -87,7 +86,10 @@ class Ingredient(models.Model):
     dimension = models.CharField('единицы измерения', max_length=16)
 
     class Meta:
-        unique_together = [['title', 'dimension']]
+        constraints = [
+            models.UniqueConstraint(
+                fields=['title', 'dimension'], name='unique ingredients'
+            )]
         verbose_name = 'ингредиент'
         verbose_name_plural = 'ингредиенты'
         ordering = ('title',)

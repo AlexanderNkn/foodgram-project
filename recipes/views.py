@@ -1,102 +1,15 @@
-from decimal import Decimal
-
 from django.contrib.auth.decorators import login_required
 from django.core.paginator import Paginator
 from django.db.models import Sum
 from django.http import HttpResponse
-from django.shortcuts import redirect, render, get_object_or_404
+from django.shortcuts import get_object_or_404, redirect, render
 from django.views.decorators.csrf import requires_csrf_token
 
-from api.models import Favorite, Purchase, Subscribe
 from users.models import User
 
+from .common import filter_tag, get_tag, save_recipe
 from .forms import RecipeForm
-from .models import Ingredient, IngredientAmount, Recipe, Tag
-
-
-def filter_tag(request):
-    """Функция готовит общую выборку рецептов в зависимости от тега
-    для дальнейшего фильтрования при необходимости."""
-    tags = request.GET.get('tags', 'bds')
-    recipe_list = Recipe.objects.prefetch_related(
-        'author', 'recipe_tag'
-        ).filter(
-        recipe_tag__slug__in=tags
-        ).distinct(
-        ).order_by('-pub_date')
-    return recipe_list, tags
-
-
-def get_tag(tags):
-    """Функция переводит русские названия в английские. Нужна для
-    корректного отображения тегов при создании и редактировании рецепта."""
-    tag_dict = {
-        'Завтрак': 'breakfast',
-        'Обед': 'lunch',
-        'Ужин': 'dinner',
-    }
-    return [tag_dict[item] for item in tags]
-
-
-def save_recipe(request, form):
-    """Функция сохраняет данные в db при создании и редактировании рецепта."""
-    recipe = form.save(commit=False)
-    recipe.author = request.user
-    # сохраняем рецепт без тегов и количества ингредиентов
-    recipe.save()
-
-    # добавляем теги
-    # если делать bulk_create, то не подтянутся цвета
-    tags = form.cleaned_data['tag']
-    for tag in tags:
-        Tag.objects.create(recipe=recipe, title=tag)
-    # через bulk_create не подтягиваются цвета тегов
-    # objs = [Tag(recipe=recipe, title=tag) for tag in tags]
-    # Tag.objects.bulk_create(objs)
-
-    # добавляем количество ингредиентов
-    objs = []  # объекты для bulk_create
-    for key, value in form.data.items():
-        if 'nameIngredient' in key:
-            title = value
-        elif 'valueIngredient' in key:
-            amount = Decimal(value.replace(',', '.'))
-        elif 'unitsIngredient' in key:
-            dimension = value
-            # получаем экземпляр ингредиента
-            # и собираем объекты IngredientAmount
-            ing = Ingredient.objects.get(title=title, dimension=dimension)
-            objs.append(
-                IngredientAmount(ingredient=ing, recipe=recipe, amount=amount)
-            )
-    IngredientAmount.objects.bulk_create(objs)
-    return None
-
-
-def get_ingredients(request):
-    """отправляет пользователю текстовый файл со списком ингредиентов."""
-    # получаем список ингредиентов с их количеством
-    ingredient_list = (Recipe.objects.prefetch_related('ingredient', 'recipe_amount')  # noqa
-                       .filter(recipe_purchase__user=request.user)
-                       .order_by('ingredient__title')
-                       .values('ingredient__title', 'ingredient__dimension')
-                       .annotate(amount=Sum('recipe_amount__amount')))
-    # готовим текстовое сообщения из списка ингредиентов
-    ingredient_txt = [
-        (f"\u2022 {item['ingredient__title'].capitalize()} "
-         f"({item['ingredient__dimension']}) \u2014 {item['amount']} \n")
-        for item in ingredient_list
-    ]
-    filename = 'ingredients.txt'
-    # отправляем файл без сохрания на диске
-    response = HttpResponse(ingredient_txt, content_type='text/plain')
-    response['Content-Disposition'] = f'attachment; filename={filename}'
-    return response
-
-
-def index(request):
-    # главная страница редиректит на страницу с рецептами
-    return redirect('recipes')
+from .models import Recipe
 
 
 def recipes(request):
@@ -209,10 +122,7 @@ def recipe_delete(request, recipe_id):
 def favorites(request):
     """Избранные рецепты пользователя."""
     recipe_list, tags = filter_tag(request)
-    # получаем id избранных рецептов пользователя
-    favorites = Favorite.objects.filter(user=request.user)
-    ids = favorites.values_list('recipe_id', flat=True)
-    recipe_list = recipe_list.filter(id__in=ids)
+    recipe_list = recipe_list.filter(recipe_favorite__user=request.user)
     paginator = Paginator(recipe_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
@@ -227,10 +137,7 @@ def favorites(request):
 def purchases(request):
     """Рецепты пользователя в списке покупок."""
     recipe_list, tags = filter_tag(request)
-    # получаем id рецептов из списка покупок
-    purchases = Purchase.objects.filter(user=request.user)
-    ids = purchases.values_list('recipe_id', flat=True)
-    recipe_list = recipe_list.filter(id__in=ids)
+    recipe_list = recipe_list.filter(recipe_purchase__user=request.user)
     return render(
         request, 'shopList.html',
         {'recipe_list': recipe_list, 'tags': tags, 'pur': 'pur'})
@@ -240,16 +147,42 @@ def purchases(request):
 def subscriptions(request):
     """Выдает список авторов, на которых подписан пользователь
     и рецептов этих авторов."""
-    author_id_list = Subscribe.objects.filter(
-        user=request.user).values_list('author_id', flat=True)
-    author_list = (User.objects.prefetch_related('recipe_author')
-                   .filter(id__in=author_id_list))
+    author_list = User.objects.prefetch_related(
+        'recipe_author'
+        ).filter(
+        following__user=request.user)
     paginator = Paginator(author_list, 6)
     page_number = request.GET.get('page')
     page = paginator.get_page(page_number)
     return render(
         request, 'myFollow.html',
         {'page': page, 'paginator': paginator, 'sub': 'sub'})
+
+
+def get_ingredients(request):
+    """отправляет пользователю текстовый файл со списком ингредиентов."""
+    # получаем список ингредиентов с их количеством
+    ingredient_list = Recipe.objects.prefetch_related(
+        'ingredient', 'recipe_amount'
+        ).filter(
+        recipe_purchase__user=request.user
+        ).order_by(
+        'ingredient__title'
+        ).values(
+        'ingredient__title', 'ingredient__dimension'
+        ).annotate(
+        amount=Sum('recipe_amount__amount'))
+    # готовим текстовое сообщения из списка ингредиентов
+    ingredient_txt = [
+        (f"\u2022 {item['ingredient__title'].capitalize()} "
+         f"({item['ingredient__dimension']}) \u2014 {item['amount']} \n")
+        for item in ingredient_list
+    ]
+    filename = 'ingredients.txt'
+    # отправляем файл без сохрания на диске
+    response = HttpResponse(ingredient_txt, content_type='text/plain')
+    response['Content-Disposition'] = f'attachment; filename={filename}'
+    return response
 
 
 @requires_csrf_token
