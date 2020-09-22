@@ -8,6 +8,7 @@
     {% include 'headerAuth.html' %}
     {% endblock %}
     {% block content %}
+    {% load user_filters %}
         <div class="single-card" data-id="{{ recipe.id }}" data-author="{{ recipe.author.id }}">
             {% load thumbnail %}
             {% thumbnail recipe.image "960x500" as im %}
@@ -17,11 +18,11 @@
                     <h1 class="single-card__title">{{ recipe.title }}</h1>
                     <div class="single-card__favorite">
                         {% if request.user != recipe.author %}
-                        {% if recipe.id not in favorite %}
-                        <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
-                        {% elif recipe.id in favorite %}
-                        <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
-                        {% endif %}
+                            {% if not recipe|is_favorite:request.user %}
+                                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite icon-favorite_big"></span></button>
+                            {% elif recipe|is_favorite:request.user %}
+                                <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_big icon-favorite_active"></span></button>
+                            {% endif %}
                         {% endif %}
                         <div class="single-card__favorite-tooltip tooltip">Добавить в избранное</div>
                     </div>
@@ -40,13 +41,13 @@
                 </div>
                 <ul class="single-card__items">
                     <li class="single-card__item">
-                        {% if recipe.id not in purchase %}
-                        <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+                        {% if not recipe|is_purchase:request.user %}
+                            <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
                         {% else %}
-                        <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
+                            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
                         {% endif %}
                         {% if recipe.author != request.user %}
-                            {% if recipe.author.id not in subscribe %}
+                            {% if not recipe.author|is_subscribe:request.user %}
                             <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" data-out>Подписаться на автора</button></li>
                             {% else %}
                             <li class="single-card__item"><button class="button button_style_light-blue button_size_subscribe" name="subscribe" >Отписаться</button></li>

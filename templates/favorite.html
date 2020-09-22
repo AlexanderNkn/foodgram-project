@@ -6,6 +6,7 @@
 {% endblock %}
 {% block header %}{%include 'headerAuth.html' %}{% endblock %}
 {% block content %}
+    {% load user_filters %}
 <div class="main__header">
     <h1 class="main__title">Избранное</h1>
     {% include 'filterByTagIndex.html' %}
@@ -30,17 +31,17 @@
             </div>
         </div>
         <div class="card__footer">
-            {% if recipe.id not in purchase %}
-            <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
+            {% if not recipe|is_purchase:request.user %}
+                <button class="button button_style_light-blue" name="purchases" data-out ><span class="icon-plus button__icon"></span>Добавить в покупки</button>
             {% else %}
-            <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
+                <button class="button button_style_light-blue-outline" name="purchases"><span class="icon-check button__icon"></span>Рецепт добавлен</button>
             {% endif %}
             {% if request.user != recipe.author %}
-            {% if recipe.id not in favorite %}
-            <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
-            {% elif recipe.id in favorite %}
-            <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_active"></span></button>
-            {% endif %}
+                {% if not recipe|is_favorite:request.user %}
+                <button class="button button_style_none" name="favorites" data-out><span class="icon-favorite"></span></button>
+                {% elif recipe|is_favorite:request.user %}
+                <button class="button button_style_none" name="favorites" ><span class="icon-favorite icon-favorite_active"></span></button>
+                {% endif %}
             {% endif %}
         </div>
     </div>

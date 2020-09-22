@@ -6,6 +6,7 @@
 {% endblock %}
 {% block header %}{%include 'headerAuth.html' %}{% endblock %}
 {% block content %}
+    {% load user_filters %}
     <div class="main__header">
         <h1 class="main__title">Мои подписки</h1>
     </div>
@@ -37,7 +38,7 @@
                 </ul>
             </div>
             <div class="card-user__footer">
-                {% if author.id in subscribe %}
+                {% if author|is_subscribe:request.user %}
                 <button class="button button_style_light-blue button_size_auto" name="subscribe">Отписаться</button>
                 {% else %}
                 <button class="button button_style_blue button_size_auto" name="subscribe" data-out>Подписаться на автора</button>
