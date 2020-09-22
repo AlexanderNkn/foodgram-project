@@ -28,8 +28,6 @@ def recipes(request):
             'page': page,
             'paginator': paginator,
             'tags': tags,
-            'url': 'recipes',
-            'index': 'index',
         },
     )
 
@@ -48,7 +46,7 @@ def new_recipe(request):
         form = RecipeForm(request.POST or None)
         tags = []  # при создании рецепта все теги сначала неактивны
     return render(request, 'formRecipe.html',
-                  {'form': form, 'tags': tags, 'new': 'new'})
+                  {'form': form, 'tags': tags})
 
 
 def recipe_view(request, recipe_id):
@@ -72,7 +70,7 @@ def profile(request, username):
     return render(request, 'authorRecipe.html', {
             'page': page,
             'paginator': paginator,
-            'arg': username,
+            'username': username,  # возвращаем обратно пришедший username
             'tags': tags})
 
 
@@ -129,8 +127,7 @@ def favorites(request):
     return render(request, 'favorite.html', {
         'page': page,
         'paginator': paginator,
-        'tags': tags,
-        'fav': 'fav'})
+        'tags': tags})
 
 
 @login_required
@@ -140,7 +137,7 @@ def purchases(request):
     recipe_list = recipe_list.filter(recipe_purchase__user=request.user)
     return render(
         request, 'shopList.html',
-        {'recipe_list': recipe_list, 'tags': tags, 'pur': 'pur'})
+        {'recipe_list': recipe_list, 'tags': tags})
 
 
 @login_required
@@ -156,7 +153,7 @@ def subscriptions(request):
     page = paginator.get_page(page_number)
     return render(
         request, 'myFollow.html',
-        {'page': page, 'paginator': paginator, 'sub': 'sub'})
+        {'page': page, 'paginator': paginator})
 
 
 def get_ingredients(request):

@@ -2,11 +2,11 @@
     <nav class="nav">
         <div class="nav__container container">
             <ul class="nav__items list">
-                <li class="nav__item {% if index %}nav__item_active{% endif %}"><a href="{% url 'recipes' %}" class="nav__link link">Рецепты</a></li>
-                <li class="nav__item {% if sub %}nav__item_active{% endif %}"><a href="{% url 'subscriptions' %}" class="nav__link link">Мои подписки</a></li>
-                <li class="nav__item {% if new %}nav__item_active{% endif %}"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
-                <li class="nav__item {% if fav %}nav__item_active{% endif %}"><a href="{% url 'favorites' %}" class="nav__link link">Избранное</a></li>
-                <li class="nav__item {% if pur %}nav__item_active{% endif %}">
+                <li class="nav__item {% if 'recipes' in request.resolver_match.url_name %}nav__item_active{% endif %}"><a href="{% url 'recipes' %}" class="nav__link link">Рецепты</a></li>
+                <li class="nav__item {% if 'subscriptions' in request.resolver_match.url_name %}nav__item_active{% endif %}"><a href="{% url 'subscriptions' %}" class="nav__link link">Мои подписки</a></li>
+                <li class="nav__item {% if 'new' in request.resolver_match.url_name %}nav__item_active{% endif %}"><a href="{% url 'new_recipe' %}" class="nav__link link">Создать рецепт</a></li>
+                <li class="nav__item {% if 'favorites' in request.resolver_match.url_name %}nav__item_active{% endif %}"><a href="{% url 'favorites' %}" class="nav__link link">Избранное</a></li>
+                <li class="nav__item {% if 'purchases' in request.resolver_match.url_name %}nav__item_active{% endif %}">
                     <a href="{% url 'purchases' %}" class="nav__link link">Список покупок</a>
                     <span class="badge badge_style_blue nav__badge" id="counter">{% if purchase_counter > 0 %}{{ purchase_counter}}{% endif %}</span></li>
             </ul>

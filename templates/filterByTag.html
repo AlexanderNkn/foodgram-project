@@ -3,8 +3,8 @@
         <a  id="breakfast"
             class="tags__checkbox tags__checkbox_style_orange 
                 {% if 'b' in tags %}tags__checkbox_active{% endif %}" 
-            href="{% if 'b' in tags %}{% url request.resolver_match.url_name arg %}?tags={{ tags|cut:'b' }}
-                {% else %}{% url request.resolver_match.url_name arg %}?tags={{ tags|add:'b' }}{% endif %}">
+            href="{% if 'b' in tags %}{% url request.resolver_match.url_name username %}?tags={{ tags|cut:'b' }}
+                {% else %}{% url request.resolver_match.url_name username %}?tags={{ tags|add:'b' }}{% endif %}">
         </a>
         <span class="tags__label">Завтрак</span>
     </li>
@@ -12,8 +12,8 @@
         <a  id="lunch" 
             class="tags__checkbox tags__checkbox_style_green
                 {% if 'd' in tags %}tags__checkbox_active{% endif %}" 
-            href="{% if 'd' in tags %}{% url request.resolver_match.url_name arg %}?tags={{ tags|cut:'d' }}
-                {% else %}{% url request.resolver_match.url_name arg %}?tags={{ tags|add:'d' }}{% endif %}">
+            href="{% if 'd' in tags %}{% url request.resolver_match.url_name username %}?tags={{ tags|cut:'d' }}
+                {% else %}{% url request.resolver_match.url_name username %}?tags={{ tags|add:'d' }}{% endif %}">
         </a>
         <span for="lunch" class="tags__label">Обед</span>
     </li>
@@ -21,8 +21,8 @@
         <a  id="dinner" 
             class="tags__checkbox tags__checkbox_style_purple
                 {% if 's' in tags %}tags__checkbox_active{% endif %}" 
-            href="{% if 's' in tags %}{% url request.resolver_match.url_name arg %}?tags={{ tags|cut:'s' }}
-                {% else %}{% url request.resolver_match.url_name arg %}?tags={{ tags|add:'s' }}{% endif %}">
+            href="{% if 's' in tags %}{% url request.resolver_match.url_name username %}?tags={{ tags|cut:'s' }}
+                {% else %}{% url request.resolver_match.url_name username %}?tags={{ tags|add:'s' }}{% endif %}">
         </a>
         <label for="dinner" class="tags__label">Ужин</label>
     </li>
