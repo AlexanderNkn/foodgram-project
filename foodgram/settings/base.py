@@ -89,9 +89,6 @@ TEMPLATES = [
         'OPTIONS': {
             'context_processors': [
                 'foodgram.context_processors.purchase_counter',
-                'foodgram.context_processors.favorite',
-                'foodgram.context_processors.purchase',
-                'foodgram.context_processors.subscribe',
                 'django.template.context_processors.debug',
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
