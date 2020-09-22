@@ -9,7 +9,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
   web:
     container_name: foodgram
-    image: "yspresi/foodgram:v4.4"
+    image: "yspresi/foodgram:v5.0"
     build: .
     env_file:
       - ./foodgram/settings/.env.prod
@@ -24,7 +24,7 @@ services:
       - db
   nginx:
     container_name: nginx
-    image: "yspresi/foodgram_nginx:v6.4"
+    image: "yspresi/foodgram_nginx:v7.0"
     build: ./nginx
     volumes:
       - static_volume:/usr/src/app/static/
