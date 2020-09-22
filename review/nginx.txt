@@ -1,0 +1,24 @@
+upstream foodgram {
+    server web:8000;
+}
+server {
+
+    listen 80;
+    server_name 130.193.37.251 my-foodgram.ml www.my-foodgram.ml;
+
+    location / {
+        proxy_set_header Host $host;
+        proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
+        proxy_pass http://foodgram;
+        client_max_body_size 1M;
+    }
+    
+    location /static/ {
+        alias /usr/src/app/static/;
+    }
+
+    location /media/ {
+        alias /usr/src/app/media/;
+    }  
+
+}
