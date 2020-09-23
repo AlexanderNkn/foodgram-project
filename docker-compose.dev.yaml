@@ -9,7 +9,7 @@ services:
       - postgres_data:/var/lib/postgresql/data/
   web:
     container_name: foodgram
-    image: "yspresi/foodgram:v5.0"
+    image: "yspresi/foodgram:v5.1"
     build: .
     env_file:
       - ./foodgram/settings/.env.prod

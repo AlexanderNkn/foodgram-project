@@ -13,14 +13,16 @@ class FavoriteSerializer(serializers.ModelSerializer):
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=Recipe.objects.all(), source='recipe')
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ['id']
+        fields = ['id', 'user']
         model = Favorite
         validators = [
             UniqueTogetherValidator(
                 queryset=Favorite.objects.all(),
-                fields=['id']
+                fields=['id', 'user']
             )
         ]
 
@@ -44,14 +46,16 @@ class PurchaseSerializer(serializers.ModelSerializer):
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=Recipe.objects.all(), source='recipe')
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ['id']
+        fields = ['id', 'user']
         model = Purchase
         validators = [
             UniqueTogetherValidator(
                 queryset=Purchase.objects.all(),
-                fields=['id']
+                fields=['id', 'user']
             )
         ]
 
@@ -66,14 +70,16 @@ class SubscribeSerializer(serializers.ModelSerializer):
     # поле называется id для соответствия с Api.js.
     id = serializers.SlugRelatedField(
         slug_field='id', queryset=User.objects.all(), source='author')
+    user = serializers.PrimaryKeyRelatedField(
+        read_only=True, default=serializers.CurrentUserDefault())
 
     class Meta:
-        fields = ['id']
+        fields = ['id', 'user']
         model = Subscribe
         validators = [
             UniqueTogetherValidator(
                 queryset=Subscribe.objects.all(),
-                fields=['id']
+                fields=['id', 'user']
             )
         ]
 
