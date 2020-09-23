@@ -1,1 +1,1 @@
-from foodgram.settings.development import *  # noqa
+from foodgram.settings import *  # noqa
