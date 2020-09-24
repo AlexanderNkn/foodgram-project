@@ -23,8 +23,8 @@ jobs:
       run: flake8 .
     
     - name: Test with pytest
-      run: pytest -vv
-
+      run: pytest 
+      
   push_to_docker_hub:
     name: Push Docker image to Docker Hub
     runs-on: ubuntu-20.04
