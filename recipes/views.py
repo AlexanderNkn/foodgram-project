@@ -146,7 +146,7 @@ def subscriptions(request):
     и рецептов этих авторов."""
     author_list = User.objects.prefetch_related(
         'recipe_author'
-        ).filter(
+            ).filter(
         following__user=request.user)
     paginator = Paginator(author_list, 6)
     page_number = request.GET.get('page')
@@ -161,13 +161,13 @@ def get_ingredients(request):
     # получаем список ингредиентов с их количеством
     ingredient_list = Recipe.objects.prefetch_related(
         'ingredient', 'recipe_amount'
-        ).filter(
+            ).filter(
         recipe_purchase__user=request.user
-        ).order_by(
+            ).order_by(
         'ingredient__title'
-        ).values(
+            ).values(
         'ingredient__title', 'ingredient__dimension'
-        ).annotate(
+            ).annotate(
         amount=Sum('recipe_amount__amount'))
     # готовим текстовое сообщения из списка ингредиентов
     ingredient_txt = [

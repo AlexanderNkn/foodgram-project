@@ -15,7 +15,7 @@ def is_favorite(value, user):
     """Проверяет, находится ли рецепт в избранном."""
     return Favorite.objects.filter(
         recipe=value, user=user
-        ).exists()
+            ).exists()
 
 
 @register.filter
@@ -23,7 +23,7 @@ def is_purchase(value, user):
     """Проверяет, находится ли рецепт в списке покупок."""
     return Purchase.objects.filter(
         recipe=value, user=user
-        ).exists()
+            ).exists()
 
 
 @register.filter
@@ -31,4 +31,4 @@ def is_subscribe(value, user):
     """Проверяет, находится ли рецепт в списке покупок."""
     return Subscribe.objects.filter(
         author=value, user=user
-        ).exists()
+            ).exists()

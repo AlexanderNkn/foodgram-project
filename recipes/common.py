@@ -9,9 +9,9 @@ def filter_tag(request):
     tags = request.GET.get('tags', 'bds')
     recipe_list = Recipe.objects.prefetch_related(
         'author', 'recipe_tag'
-        ).filter(
+            ).filter(
         recipe_tag__slug__in=tags
-        ).distinct()
+            ).distinct()
     return recipe_list, tags
 
 
