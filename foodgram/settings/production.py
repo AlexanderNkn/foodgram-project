@@ -11,13 +11,14 @@ ALLOWED_HOSTS = [
 
 DATABASES = {
     "default": {
-        "ENGINE": os.environ.get("SQL_ENGINE", "django.db.backends.sqlite3"),  # noqa
-        "NAME": os.environ.get("SQL_DATABASE", os.path.join(BASE_DIR, "db.sqlite3")),  # noqa
-        "USER": os.environ.get("SQL_USER", "user"),  # noqa
-        "PASSWORD": os.environ.get("SQL_PASSWORD", "password"),  # noqa
-        "HOST": os.environ.get("SQL_HOST", "localhost"),  # noqa
-        "PORT": os.environ.get("SQL_PORT", "5432"),  # noqa
+        'ENGINE': os.environ.get('DB_ENGINE', 'django.db.backends.postgresql'),  # noqa
+        'NAME': os.environ.get('DB_NAME'),  # noqa
+        'USER': os.environ.get('DB_USER'),  # noqa
+        'PASSWORD': os.environ.get('DB_PASSWORD'),  # noqa
+        'HOST': os.environ.get('DB_HOST'),  # noqa
+        'PORT': os.environ.get('DB_PORT'),  # noqa
     }
 }
+
 
 STATIC_ROOT = os.path.join(BASE_DIR, 'static') # noqa
