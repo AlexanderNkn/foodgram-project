@@ -147,4 +147,5 @@ foodgram_versions.txt
 ya_cloud
 
 # custom env
-# .env.prod
+.env.prod
+.env.prod.db
