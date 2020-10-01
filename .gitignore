@@ -149,3 +149,4 @@ ya_cloud
 # custom env
 .env.prod
 .env.prod.db
+.env.dev

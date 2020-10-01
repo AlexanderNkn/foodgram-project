@@ -4,15 +4,15 @@ services:
     container_name: postgres
     image: "postgres:12.0-alpine"
     env_file:
-      - foodgram/settings/.env.prod.db
+      - foodgram/settings/.env.dev
     volumes:
       - postgres_data:/var/lib/postgresql/data/
   web:
     container_name: foodgram
-    image: "yspresi/foodgram:v7.0"
+    image: "yspresi/foodgram:v7.1"
     build: .
     env_file:
-      - foodgram/settings/.env.prod
+      - foodgram/settings/.env.dev
     restart: always
     command: gunicorn foodgram.wsgi:application --bind 0.0.0.0:8000
     volumes:

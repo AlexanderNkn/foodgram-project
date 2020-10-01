@@ -30,3 +30,8 @@ recipes/static/used_templates/
 .pytets_cache/
 foodgram_versions.txt
 ya_cloud/
+
+.env
+.env.dev
+.env.prod
+.env.prod.db

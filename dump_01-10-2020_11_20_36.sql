@@ -1048,8 +1048,6 @@ COPY public.api_purchase (id, recipe_id, user_id) FROM stdin;
 61	9	3
 62	8	3
 63	4	3
-64	2	2
-65	3	2
 \.
 
 
@@ -1116,10 +1114,10 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 31	Can delete кол-во ингредиента	8	delete_ingredientamount
 32	Can view кол-во ингредиента	8	view_ingredientamount
 33	Can add рецепт	9	add_recipe
+37	Can add тег	10	add_tag
 34	Can change рецепт	9	change_recipe
 35	Can delete рецепт	9	delete_recipe
 36	Can view рецепт	9	view_recipe
-37	Can add тег	10	add_tag
 38	Can change тег	10	change_tag
 39	Can delete тег	10	delete_tag
 40	Can view тег	10	view_tag
@@ -1147,70 +1145,6 @@ COPY public.auth_permission (id, name, content_type_id, codename) FROM stdin;
 62	Can change flat page	16	change_flatpage
 63	Can delete flat page	16	delete_flatpage
 64	Can view flat page	16	view_flatpage
-65	Can add log entry	1	add_logentry
-66	Can change log entry	1	change_logentry
-67	Can delete log entry	1	delete_logentry
-68	Can view log entry	1	view_logentry
-69	Can add permission	2	add_permission
-70	Can change permission	2	change_permission
-71	Can delete permission	2	delete_permission
-72	Can view permission	2	view_permission
-73	Can add group	3	add_group
-74	Can change group	3	change_group
-75	Can delete group	3	delete_group
-76	Can view group	3	view_group
-77	Can add content type	4	add_contenttype
-78	Can change content type	4	change_contenttype
-79	Can delete content type	4	delete_contenttype
-80	Can view content type	4	view_contenttype
-81	Can add session	5	add_session
-82	Can change session	5	change_session
-83	Can delete session	5	delete_session
-84	Can view session	5	view_session
-85	Can add site	6	add_site
-86	Can change site	6	change_site
-87	Can delete site	6	delete_site
-88	Can view site	6	view_site
-89	Can add flat page	7	add_flatpage
-90	Can change flat page	7	change_flatpage
-91	Can delete flat page	7	delete_flatpage
-92	Can view flat page	7	view_flatpage
-93	Can add user	8	add_user
-94	Can change user	8	change_user
-95	Can delete user	8	delete_user
-96	Can view user	8	view_user
-97	Can add подписку	9	add_subscribe
-98	Can change подписку	9	change_subscribe
-99	Can delete подписку	9	delete_subscribe
-100	Can view подписку	9	view_subscribe
-101	Can add рецепт в список покупок	10	add_purchase
-102	Can change рецепт в список покупок	10	change_purchase
-103	Can delete рецепт в список покупок	10	delete_purchase
-104	Can view рецепт в список покупок	10	view_purchase
-105	Can add избранный рецепт	11	add_favorite
-106	Can change избранный рецепт	11	change_favorite
-107	Can delete избранный рецепт	11	delete_favorite
-108	Can view избранный рецепт	11	view_favorite
-109	Can add ингредиент	12	add_ingredient
-110	Can change ингредиент	12	change_ingredient
-111	Can delete ингредиент	12	delete_ingredient
-112	Can view ингредиент	12	view_ingredient
-113	Can add кол-во ингредиента	13	add_ingredientamount
-114	Can change кол-во ингредиента	13	change_ingredientamount
-115	Can delete кол-во ингредиента	13	delete_ingredientamount
-116	Can view кол-во ингредиента	13	view_ingredientamount
-117	Can add рецепт	14	add_recipe
-118	Can change рецепт	14	change_recipe
-119	Can delete рецепт	14	delete_recipe
-120	Can view рецепт	14	view_recipe
-121	Can add тег	15	add_tag
-122	Can change тег	15	change_tag
-123	Can delete тег	15	delete_tag
-124	Can view тег	15	view_tag
-125	Can add kv store	16	add_kvstore
-126	Can change kv store	16	change_kvstore
-127	Can delete kv store	16	delete_kvstore
-128	Can view kv store	16	view_kvstore
 \.
 
 
@@ -1338,32 +1272,32 @@ COPY public.django_flatpage_sites (id, flatpage_id, site_id) FROM stdin;
 --
 
 COPY public.django_migrations (id, app, name, applied) FROM stdin;
-1	contenttypes	0001_initial	2020-09-30 20:58:45.983102+00
-2	contenttypes	0002_remove_content_type_name	2020-09-30 20:58:45.995705+00
-3	auth	0001_initial	2020-09-30 20:58:46.031442+00
-4	auth	0002_alter_permission_name_max_length	2020-09-30 20:58:46.070858+00
-5	auth	0003_alter_user_email_max_length	2020-09-30 20:58:46.08195+00
-6	auth	0004_alter_user_username_opts	2020-09-30 20:58:46.093859+00
-7	auth	0005_alter_user_last_login_null	2020-09-30 20:58:46.105291+00
-8	auth	0006_require_contenttypes_0002	2020-09-30 20:58:46.109447+00
-9	auth	0007_alter_validators_add_error_messages	2020-09-30 20:58:46.121645+00
-10	auth	0008_alter_user_username_max_length	2020-09-30 20:58:46.136503+00
-11	auth	0009_alter_user_last_name_max_length	2020-09-30 20:58:46.150021+00
-12	auth	0010_alter_group_name_max_length	2020-09-30 20:58:46.161293+00
-13	auth	0011_update_proxy_permissions	2020-09-30 20:58:46.17192+00
-14	auth	0012_alter_user_first_name_max_length	2020-09-30 20:58:46.183037+00
-15	users	0001_initial	2020-09-30 20:58:46.218635+00
-16	admin	0001_initial	2020-09-30 20:58:46.265311+00
-17	admin	0002_logentry_remove_auto_add	2020-09-30 20:58:46.300152+00
-18	admin	0003_logentry_add_action_flag_choices	2020-09-30 20:58:46.312368+00
-19	recipes	0001_initial	2020-09-30 20:58:46.397422+00
-20	api	0001_initial	2020-09-30 20:58:46.51329+00
-21	sites	0001_initial	2020-09-30 20:58:46.567377+00
-22	flatpages	0001_initial	2020-09-30 20:58:46.592374+00
-23	recipes	0002_auto_20200917_1050	2020-09-30 20:58:46.827749+00
-24	sessions	0001_initial	2020-09-30 20:58:46.867949+00
-25	sites	0002_alter_domain_unique	2020-09-30 20:58:46.931123+00
-26	thumbnail	0001_initial	2020-09-30 20:58:46.973101+00
+1	contenttypes	0001_initial	2020-10-01 07:48:03.408601+00
+2	contenttypes	0002_remove_content_type_name	2020-10-01 07:48:03.418064+00
+3	auth	0001_initial	2020-10-01 07:48:03.451623+00
+4	auth	0002_alter_permission_name_max_length	2020-10-01 07:48:03.487615+00
+5	auth	0003_alter_user_email_max_length	2020-10-01 07:48:03.49739+00
+6	auth	0004_alter_user_username_opts	2020-10-01 07:48:03.508599+00
+7	auth	0005_alter_user_last_login_null	2020-10-01 07:48:03.519465+00
+8	auth	0006_require_contenttypes_0002	2020-10-01 07:48:03.524845+00
+9	auth	0007_alter_validators_add_error_messages	2020-10-01 07:48:03.535368+00
+10	auth	0008_alter_user_username_max_length	2020-10-01 07:48:03.548023+00
+11	auth	0009_alter_user_last_name_max_length	2020-10-01 07:48:03.559389+00
+12	auth	0010_alter_group_name_max_length	2020-10-01 07:48:03.570645+00
+13	auth	0011_update_proxy_permissions	2020-10-01 07:48:03.581554+00
+14	auth	0012_alter_user_first_name_max_length	2020-10-01 07:48:03.594155+00
+15	users	0001_initial	2020-10-01 07:48:03.63203+00
+16	admin	0001_initial	2020-10-01 07:48:03.684412+00
+17	admin	0002_logentry_remove_auto_add	2020-10-01 07:48:03.70908+00
+18	admin	0003_logentry_add_action_flag_choices	2020-10-01 07:48:03.719696+00
+19	recipes	0001_initial	2020-10-01 07:48:03.789162+00
+20	api	0001_initial	2020-10-01 07:48:03.892051+00
+21	sites	0001_initial	2020-10-01 07:48:03.941228+00
+22	flatpages	0001_initial	2020-10-01 07:48:03.962437+00
+23	recipes	0002_auto_20200917_1050	2020-10-01 07:48:04.141965+00
+24	sessions	0001_initial	2020-10-01 07:48:04.159563+00
+25	sites	0002_alter_domain_unique	2020-10-01 07:48:04.181443+00
+26	thumbnail	0001_initial	2020-10-01 07:48:04.19636+00
 \.
 
 
@@ -1372,14 +1306,15 @@ COPY public.django_migrations (id, app, name, applied) FROM stdin;
 --
 
 COPY public.django_session (session_key, session_data, expire_date) FROM stdin;
+j6qnqm77x52cuzvk2tnsnfbzrvx4r1rd	.eJxVjEEOwiAQRe_C2hAo47R16b5nIMPASNVAUtqV8e7apAvd_vfefylP25r91tLi56guyqnT7xaIH6nsIN6p3KrmWtZlDnpX9EGbnmpMz-vh_h1kavlbAw4IYBL2YoKIBaQULTjjOGDCEYxQj85F7uII5ICD4TNbkcEOXS_q_QHXWzfR:1kNipO:aXVGqPfra40sH96ycJ5VCnVhS_tZSt312m0TZJOpqg8	2020-10-14 20:35:54.632+00
+tfn2c09zfew6asyixxtsht06un3ytaqv	.eJxVjDsOwyAQRO9CHaEF802Z3mdAy4KDkwgkY1dR7h5bcpE0U8x7M28WcFtL2HpewpzYlSl2-e0i0jPXA6QH1nvj1Oq6zJEfCj9p52NL-XU73b-Dgr3sa6cdgjSkpwhaTN5YkgJ8GgCFTdbkSNka48ArUlroAayMSQI5Q35P9vkCwvg25Q:1kNjOH:vZX2J_BAi-2vnMo8_cprLN3yAS2fs8XJj-OlWA7NARU	2020-10-14 21:11:57.019362+00
 18b69vbun0vu2reke08ut3v2j7f3vg7p	.eJxVjEEOwiAQRe_C2hBwBlpcuu8ZyDAMtmpoUtqV8e7apAvd_vfef6lI2zrGrckSp6wuyqrT75aIH1J3kO9Ub7Pmua7LlPSu6IM2PcxZntfD_TsYqY3fGiQhFEFrrOEAHjC5wufeIXbckRefhLhAAeyJgtjM2SUIYHLpXUH1_gDnYjhh:1kJ1Za:9U-CBje9Jpsp9DXo1Y4NXD8iORbT_z0hqusp5O9o51Y	2020-10-01 21:36:10.076+00
 36wuhu7dmpx3osgocwzmvhuxuc6l8ble	.eJxVjMsOwiAQRf-FtSGAHR4u3fcbCDAzUjU0Ke3K-O_apAvd3nPOfYmYtrXGrdMSJxQXocXpd8upPKjtAO-p3WZZ5rYuU5a7Ig_a5TgjPa-H-3dQU6_fOrAGqx0ChoGDQZXIuoDKlME5cAYysWL0CTEAeEuega02XIozTGfx_gDeSjgs:1kIyS5:thLZ4bYbDE9KXVyxks5ppXdikk7S4lEK9L65OYhkVdY	2020-10-01 18:16:13.564+00
 43ls0mc7ctgbh0vba1d7hxbs6qspsszh	.eJxVjEEOwiAQRe_C2hBwBlpcuu8ZyDAMtmpoUtqV8e7apAvd_vfef6lI2zrGrckSp6wuyqrT75aIH1J3kO9Ub7Pmua7LlPSu6IM2PcxZntfD_TsYqY3fGiQhFEFrrOEAHjC5wufeIXbckRefhLhAAeyJgtjM2SUIYHLpXUH1_gDnYjhh:1kJ1K1:x28a4-PJW3GyVgh-hDhm9f39Io246Zp7COp7W-B0IeA	2020-10-01 21:20:05.232+00
 b91reppucsf9z90o0w3c7953zo6vrlol	.eJxVjEEOwiAQRe_C2hBwBlpcuu8ZyDAMtmpoUtqV8e7apAvd_vfef6lI2zrGrckSp6wuyqrT75aIH1J3kO9Ub7Pmua7LlPSu6IM2PcxZntfD_TsYqY3fGiQhFEFrrOEAHjC5wufeIXbckRefhLhAAeyJgtjM2SUIYHLpXUH1_gDnYjhh:1kJCdq:RS1qwGuU4mMCqezElD4zZ3g_j2xuSJA1KLKmlMGAdK0	2020-10-02 09:25:18.458+00
 boihecn10thr7ciy6tpe3qjjmq82l1j5	.eJxVjMsOwiAQRf-FtSGAHR4u3fcbCDAzUjU0Ke3K-O_apAvd3nPOfYmYtrXGrdMSJxQXocXpd8upPKjtAO-p3WZZ5rYuU5a7Ig_a5TgjPa-H-3dQU6_fOrAGqx0ChoGDQZXIuoDKlME5cAYysWL0CTEAeEuega02XIozTGfx_gDeSjgs:1kIx5t:0sWn_UAFe2sunFuu5JqhlvoJPxjVxfAWvWPQCRRdmqo	2020-10-01 16:49:13.081+00
-j6qnqm77x52cuzvk2tnsnfbzrvx4r1rd	.eJxVjEEOwiAQRe_C2hAo47R16b5nIMPASNVAUtqV8e7apAvd_vfefylP25r91tLi56guyqnT7xaIH6nsIN6p3KrmWtZlDnpX9EGbnmpMz-vh_h1kavlbAw4IYBL2YoKIBaQULTjjOGDCEYxQj85F7uII5ICD4TNbkcEOXS_q_QHXWzfR:1kNipO:aXVGqPfra40sH96ycJ5VCnVhS_tZSt312m0TZJOpqg8	2020-10-14 20:35:54.632+00
 vwaqxl0wfkv5u4i2chtujyxj8euiwc68	.eJxVjEEOwiAQRe_C2hBwBlpcuu8ZyDAMtmpoUtqV8e7apAvd_vfef6lI2zrGrckSp6wuyqrT75aIH1J3kO9Ub7Pmua7LlPSu6IM2PcxZntfD_TsYqY3fGiQhFEFrrOEAHjC5wufeIXbckRefhLhAAeyJgtjM2SUIYHLpXUH1_gDnYjhh:1kJ1Rz:cYz5yJ6gq8zadQ4cyH9dRSfi_y16MPWnXoAlXJgkrFU	2020-10-01 21:28:19.263+00
-tfn2c09zfew6asyixxtsht06un3ytaqv	.eJxVjDsOwyAQRO9CHaEF802Z3mdAy4KDkwgkY1dR7h5bcpE0U8x7M28WcFtL2HpewpzYlSl2-e0i0jPXA6QH1nvj1Oq6zJEfCj9p52NL-XU73b-Dgr3sa6cdgjSkpwhaTN5YkgJ8GgCFTdbkSNka48ArUlroAayMSQI5Q35P9vkCwvg25Q:1kNjOH:vZX2J_BAi-2vnMo8_cprLN3yAS2fs8XJj-OlWA7NARU	2020-10-14 21:11:57.019362+00
+mndtlra4kvt638o5iiizmwww6jvg6l5i	.eJxVjEEOwiAQRe_C2hAo47R16b5nIMPASNVAUtqV8e7apAvd_vfefylP25r91tLi56guyqnT7xaIH6nsIN6p3KrmWtZlDnpX9EGbnmpMz-vh_h1kavlbAw4IYBL2YoKIBaQULTjjOGDCEYxQj85F7uII5ICD4TNbkcEOXS_q_QHXWzfR:1kNtmR:XeBxblF8z2Se4BWj_VyQArOoMy8nqVnoyd-xt4Zg2cI	2020-10-15 08:17:35.454309+00
 \.
 
 
@@ -3597,52 +3532,52 @@ COPY public.recipes_ingredient (id, title, dimension) FROM stdin;
 --
 
 COPY public.recipes_ingredientamount (id, amount, ingredient_id, recipe_id) FROM stdin;
-326	800.0	782	7
-327	200.0	1782	7
-332	2.0	812	4
-333	120.0	149	4
-334	2.0	2186	4
-335	60.0	1423	4
-251	450.0	281	5
-252	4.0	1055	5
-253	1.5	252	5
-254	300.0	1102	5
-255	400.0	1351	5
-256	400.0	1927	5
-257	250.0	521	5
-263	3.0	2186	2
-264	70.0	1037	2
-265	2.0	1345	2
-266	120.0	1754	2
-267	50.0	436	2
-273	6.0	2149	1
-274	4.0	2186	1
-275	1.0	1083	1
-276	2.5	1413	1
-277	30.0	1650	1
-284	2.0	531	8
-285	1.0	767	8
-286	200.0	1055	8
-287	50.0	1492	8
-288	20.0	1688	8
-289	50.0	1	8
-291	5.0	1084	6
-296	0.0	7	3
-297	20.0	13	3
-298	30.0	194	3
-299	0.0	1917	3
-312	200.0	1747	9
-313	10.0	1314	9
-314	10.0	80	9
-315	3.0	1170	9
-316	3.0	2077	9
-317	2.0	2186	9
-318	60.0	232	9
-319	600.0	281	9
-320	400.0	1596	9
-321	150.0	194	9
-322	250.0	1077	9
-323	50.0	1	9
+156	200.0	1747	9
+157	10.0	1314	9
+158	10.0	80	9
+159	3.0	1170	9
+160	3.0	2077	9
+161	2.0	2186	9
+162	60.0	232	9
+163	600.0	281	9
+164	400.0	1596	9
+165	150.0	194	9
+166	250.0	1077	9
+167	50.0	1	9
+232	0.0	7	3
+233	20.0	13	3
+170	800.0	782	7
+171	200.0	1782	7
+234	30.0	194	3
+235	0.0	1917	3
+176	2.0	812	4
+177	120.0	149	4
+178	2.0	2186	4
+179	60.0	1423	4
+187	450.0	281	5
+188	4.0	1055	5
+189	1.5	252	5
+190	300.0	1102	5
+191	400.0	1351	5
+192	400.0	1927	5
+193	250.0	521	5
+199	3.0	2186	2
+200	70.0	1037	2
+201	2.0	1345	2
+202	120.0	1754	2
+203	50.0	436	2
+209	6.0	2149	1
+210	4.0	2186	1
+211	1.0	1083	1
+212	2.5	1413	1
+213	30.0	1650	1
+220	2.0	531	8
+221	1.0	767	8
+222	200.0	1055	8
+223	50.0	1492	8
+224	20.0	1688	8
+225	50.0	1	8
+227	5.0	1084	6
 \.
 
 
@@ -3651,15 +3586,15 @@ COPY public.recipes_ingredientamount (id, amount, ingredient_id, recipe_id) FROM
 --
 
 COPY public.recipes_recipe (id, title, duration, text, pub_date, image, slug, author_id) FROM stdin;
-6	Говяжье сердце тушеное в сметане	180	Залейте сердце холодной водой на 2 часа, чтобы из него вышла кровь. \r\nПорежьте сердце на тонкие брусочки и выложите в сковороду. Влейте к нему 200 миллилитров воды. \r\nПоставьте на средний огонь и доведите до кипения, снимая пену. Закройте крышкой, убавьте огонь и тушите до мягкости. На это уйдет от 1 до 1,5 часов. Все зависит от толщины нарезки. \r\nВсе посолите и поперчите. Добавьте в сковороду к сердцу сметану и перемешайте. \r\nВлейте оставшуюся воду и перемешайте. Выключите огонь и оставьте на 10 минут.\r\nРепчатый лук почистите и порежьте. В сковороду налейте растительное масло, разогрейте его на среднем огне и выложите лук. Обжаривайте лук в течение 5 минут. \r\nВыложите обжаренный лук в сковороду с сердцем и перемешайте.\r\nНа сухую сковороду насыпьте муку и обжарьте ее на медленном огне до орехового запаха. \r\nВлейте немного воды и перемешайте, чтобы не было комочков. Варите 1-2 минуты на слабом огне до загустения. \r\nПроцедите через сито мучную массу в сковороду и перемешайте. Готовьте на медленном огне еще 7 минут, до загустения. \r\nПетрушку мелко порежьте, чеснок почистите и натрите на мелкой терке, добавьте в сковороду с тушеным сердцем. Перемешайте, прогрейте еще 2 минуты и снимите с огня. \r\nПриятного аппетита!	2020-09-04 17:58:49.576+00	recipe_images/snow_din_lB8elmO.jfif	говяжье-сердце-тушеное-в-сметане	3
-1	Шарлотка с яблоками	60	В глубокой миске взбейте яйца с сахаром. В массу просейте муку с разрыхлителем через сито. Хорошо перемешайте тесто. Очищенное яблоко без сердцевины нарежьте произвольно, а потом добавьте в тесто. Форму для выпечки смажьте маслом. Влейте в неё тесто. Запекайте шарлотку при 180 градусах в течение 40-50 минут. Приятного чаепития!	2020-09-04 17:03:11.106+00	recipe_images/ded_br_IK4kqDl.jpg	шарлотка-с-яблоками	2
-3	Яичные роллы с ветчиной и авокадо	15	В мисочку разбейте 4 яйца и добавьте 2 белка, слегка взбейте массу вилкой или венчиком. Добавьте соль и перец. \r\nНа сковороде разогрейте немного растительного масла и вылейте туда яичную массу. Жарьте минуты полторы на одной стороне, потом переверните и обжарьте еще минутку. \r\nПока жарится омлет, вымойте авокадо, разрежьте напополам, достаньте косточку. Мякоть отделите от шкурки. Нарежьте мякоть мелким кубиком. \r\nГотовый омлет выложите на плоскую тарелку, сверху положите 2 кусочка ветчины или бекона. \r\nАвокадо выложите на омлет ближе к одному краю, сверните омлет с ветчиной и авокадо в плотный рулет.\r\nПолучившийся рулет разрежьте на 2 небольших ролла и подавайте к столу.	2020-09-04 17:23:22.839+00	recipe_images/snow_br_X8gAPq5.jpg	яичные-роллы-с-ветчиной-и-авокад	3
-5	Итальянский обед	120	1. Очистите лук и нарежьте его мелко, обжарьте фарш с луком в кастрюле до готовности. Тем временем очистите и нарежьте кружочками морковь, сельдерей. Добавьте овощи к обжаренному мясу. \r\n2. Отправьте кастрюлю на огонь, добавьте фасоль (слейте воду), консервированные томаты (свежие), томатный соус. Влейте воду и бульон, а также посолите и поперчите, добавьте все специи по вкусу (примерно по 1 чайной ложке каждой). Варите суп после закипания 15 минут. \r\n3. Спустя необходимое время добавьте в кастрюлю свежую кукурузу, измельченную капусту, перемешайте и варите до готовности. \r\n4. Суп подавайте сразу после приготовления, он густой и очень сытный.	2020-09-04 17:51:11.483+00	recipe_images/ded_din_uaBSuJS.jpg	итальянский-обед	2
-2	Омлет	10	Для того чтобы приготовить вкусный, быстрый и полезный завтрак, необходимо промыть помидоры и нарезать их кружочками. После этого промываем и просушиваем зелень, а затем мелко рубим ее. Сыр необходимо натереть на терке.\r\nЯйца разбиваем в отдельную емкость и смешиваем с молоком и специями. Тщательно взбиваем. На раскаленную сковороду наливаем растительное масло, начинаем тушить помидоры. После добавляем зелень и соль, тщательно перемешивая. Затем добавляем томатный соус и заливаем смесь яичной смесью. Накрываем крышкой и готовим в течение нескольких минут, после чего посыпаем яичницу тертым сыром и зеленью. Готовим в течение 5 минут — и вуаля! Вкусный и полезный завтрак готов, приятного аппетита!	2020-09-04 17:14:12.384+00	recipe_images/ded_su_WVqlsGW.jpg	омлет	2
-8	Рыба жареная	50	Приготовить таким образом можно не только кету, но и форель, лосось - любую красную рыбу. Промоем рыбные стейки, очистим их, если необходимо. \r\nПриготовим маринад. В небольшой мисочке смешиваем соевый соус, сок из целого апельсина, сахар и масло. \r\nЗаливаем рыбные стейки половиной приготовленного маринада и оставляем минут на 15. \r\nРыбу будем запекать в духовке. Форму для запекания можно застелить фольгой. Слегка смажем фольгу маслом и выложим на неё стейки. Ставим их запекаться в разогретую до 200 градусов духовку на 15 минут. Следите за рыбкой, не нужно ее пересушивать! \r\nА теперь займемся салатом. Пока рыба мариновалась, мы уже почистили морковку, да? Натираем морковку на терке или с помощью овощечистки. Пекинскую капусту тонко шинкуем. \r\nЗелень рукколы промоем и подсушим на полотенце, пусть уйдет лишняя влага. Добавим листики рукколы к капусте и морковке. Перемешаем. \r\nРаскладываем салат по тарелкам.\r\nРыбка уже готова, достаем ее из духовки. Выкладываем на салат, солим и перчим. Поливаем оставшимся маринадом, посыпаем кунжутными семечками и подаем к столу.	2020-09-04 18:26:30.725+00	recipe_images/snow_din_iG263a2.jpg	рыба-жареная	3
-7	Курица в сырном соусе "Птичье молочко"	70	Бедра промойте под прохладной водой. \r\nРазрежьте бедра на две части, залейте водой. Накройте сковороду крышкой, тушите на медленном огне до тех пор, пока мясо не будет легко сниматься с кости, в течение 40-60 минут.\r\nДобавьте плавленный сырок, молотый перец и сушеный чеснок. Перемешайте и тушите еще 10 минут.\r\nПриятного аппетита!	2020-09-04 18:10:01.699+00	recipe_images/leo_din_rpp40G3.jfif	курица-в-сырном-соусе-птичье-мол	4
-9	Мясной хлеб	100	1. Духовку разогрейте до 180 градусов. В большой миске соедините сухари, пармезан, петрушку, базилик, орегано, шалфей, соль и перец, а также измельченный чеснок и лук. \r\n2. Теперь в эту миску отправьте оба вида фарша, слегка взбитые яйца и вино. Все хорошо вымешайте до однородности.\r\n3. В форму для выпечки выложите пергаментную бумагу, большую часть мясной смеси влейте в форму. \r\n4. Сверху выложите кусочки ветчины и большую часть порезанной моцареллы. Теперь при помощи бумаги, поднимая ее за края, утрамбуйте мясной рулет, чтобы он стал плотным и начинка оказалась внутри. \r\n5. С помощью оставшейся мясной массы замажьте все неровности и трещины в рулете. Теперь аккуратно перенесите рулет на противень (можно прямо с бумагой) и выпекайте в духовке 70 минут. \r\n6. После выпекания смажьте рулет томатным соусом и украсьте оставшейся моцареллой, натерев ее. Отправьте в духовку еще на 5 минут.	2020-09-04 18:35:32.787+00	recipe_images/leo_sup_8IpgLzM.jpg	мясной-хлеб	4
-4	Лаваш с начинкой	20	Брынзу натрите на терке в пиалу или глубокую тарелку. Если сыр не соленый, то чуть присолите его. Куриные яйца вбейте в миску, посолите и взбейте в течение 1-2 минут. \r\nЛисты лаваша нарежьте лентами с помощью ножниц. Один лист разрежьте на три ленты. На край ленты выложите часть начинки. \r\nЗаверните треугольником, затем еще раз заверните, чтобы открытые края лаваша, через которые видно начинку, оказались закрытыми. Отрежьте ленту и снова выложите на нее начинку, приготовьте еще одну заготовку. \r\nТаким образом приготовьте все заготовки. \r\nПрогрейте сковороду с растительным маслом на минимальном нагреве, обмакните заготовку в яичную смесь со всех сторон. \r\nВыложите на сковороду. Также поступите и с остальными заготовками. Обжарьте около 1-2 минут с одной стороны. \r\nПереверните на другую сторону и обжарьте до румяности. Нагрев не повышайте, иначе они подгорят, а внутри не пропекутся. \r\nВыложите лаваш с начинкой на тарелку и подайте к столу с чаем или кофе. Блюдо идеально для завтрака или полдника.	2020-09-04 17:37:42.255+00	recipe_images/leo_br_dKSSVWz.jfif	лаваш-с-начинкой	4
+1	Шарлотка с яблоками	60	В глубокой миске взбейте яйца с сахаром. В массу просейте муку с разрыхлителем через сито. Хорошо перемешайте тесто. Очищенное яблоко без сердцевины нарежьте произвольно, а потом добавьте в тесто. Форму для выпечки смажьте маслом. Влейте в неё тесто. Запекайте шарлотку при 180 градусах в течение 40-50 минут. Приятного чаепития!	2020-09-04 17:03:11.106+00	recipe_images/ded_br_DqsmoGo.jpg	шарлотка-с-яблоками	2
+3	Яичные роллы с ветчиной и авокадо	15	В мисочку разбейте 4 яйца и добавьте 2 белка, слегка взбейте массу вилкой или венчиком. Добавьте соль и перец. \r\nНа сковороде разогрейте немного растительного масла и вылейте туда яичную массу. Жарьте минуты полторы на одной стороне, потом переверните и обжарьте еще минутку. \r\nПока жарится омлет, вымойте авокадо, разрежьте напополам, достаньте косточку. Мякоть отделите от шкурки. Нарежьте мякоть мелким кубиком. \r\nГотовый омлет выложите на плоскую тарелку, сверху положите 2 кусочка ветчины или бекона. \r\nАвокадо выложите на омлет ближе к одному краю, сверните омлет с ветчиной и авокадо в плотный рулет.\r\nПолучившийся рулет разрежьте на 2 небольших ролла и подавайте к столу.	2020-09-04 17:23:22.839+00	recipe_images/snow_br_Uo2eF5f.jpg	яичные-роллы-с-ветчиной-и-авокад	3
+7	Курица в сырном соусе "Птичье молочко"	70	Бедра промойте под прохладной водой. \r\nРазрежьте бедра на две части, залейте водой. Накройте сковороду крышкой, тушите на медленном огне до тех пор, пока мясо не будет легко сниматься с кости, в течение 40-60 минут.\r\nДобавьте плавленный сырок, молотый перец и сушеный чеснок. Перемешайте и тушите еще 10 минут.\r\nПриятного аппетита!	2020-09-04 18:10:01.699+00	recipe_images/leo_din_MGIeVIk.jfif	курица-в-сырном-соусе-птичье-мол	4
+5	Итальянский обед	120	1. Очистите лук и нарежьте его мелко, обжарьте фарш с луком в кастрюле до готовности. Тем временем очистите и нарежьте кружочками морковь, сельдерей. Добавьте овощи к обжаренному мясу. \r\n2. Отправьте кастрюлю на огонь, добавьте фасоль (слейте воду), консервированные томаты (свежие), томатный соус. Влейте воду и бульон, а также посолите и поперчите, добавьте все специи по вкусу (примерно по 1 чайной ложке каждой). Варите суп после закипания 15 минут. \r\n3. Спустя необходимое время добавьте в кастрюлю свежую кукурузу, измельченную капусту, перемешайте и варите до готовности. \r\n4. Суп подавайте сразу после приготовления, он густой и очень сытный.	2020-09-04 17:51:11.483+00	recipe_images/ded_din_TEYdnIZ.jpg	итальянский-обед	2
+6	Говяжье сердце тушеное в сметане	180	Залейте сердце холодной водой на 2 часа, чтобы из него вышла кровь. \r\nПорежьте сердце на тонкие брусочки и выложите в сковороду. Влейте к нему 200 миллилитров воды. \r\nПоставьте на средний огонь и доведите до кипения, снимая пену. Закройте крышкой, убавьте огонь и тушите до мягкости. На это уйдет от 1 до 1,5 часов. Все зависит от толщины нарезки. \r\nВсе посолите и поперчите. Добавьте в сковороду к сердцу сметану и перемешайте. \r\nВлейте оставшуюся воду и перемешайте. Выключите огонь и оставьте на 10 минут.\r\nРепчатый лук почистите и порежьте. В сковороду налейте растительное масло, разогрейте его на среднем огне и выложите лук. Обжаривайте лук в течение 5 минут. \r\nВыложите обжаренный лук в сковороду с сердцем и перемешайте.\r\nНа сухую сковороду насыпьте муку и обжарьте ее на медленном огне до орехового запаха. \r\nВлейте немного воды и перемешайте, чтобы не было комочков. Варите 1-2 минуты на слабом огне до загустения. \r\nПроцедите через сито мучную массу в сковороду и перемешайте. Готовьте на медленном огне еще 7 минут, до загустения. \r\nПетрушку мелко порежьте, чеснок почистите и натрите на мелкой терке, добавьте в сковороду с тушеным сердцем. Перемешайте, прогрейте еще 2 минуты и снимите с огня. \r\nПриятного аппетита!	2020-09-04 17:58:49.576+00	recipe_images/snow_din_07Avaiz.jfif	говяжье-сердце-тушеное-в-сметане	3
+9	Мясной хлеб	100	1. Духовку разогрейте до 180 градусов. В большой миске соедините сухари, пармезан, петрушку, базилик, орегано, шалфей, соль и перец, а также измельченный чеснок и лук. \r\n2. Теперь в эту миску отправьте оба вида фарша, слегка взбитые яйца и вино. Все хорошо вымешайте до однородности.\r\n3. В форму для выпечки выложите пергаментную бумагу, большую часть мясной смеси влейте в форму. \r\n4. Сверху выложите кусочки ветчины и большую часть порезанной моцареллы. Теперь при помощи бумаги, поднимая ее за края, утрамбуйте мясной рулет, чтобы он стал плотным и начинка оказалась внутри. \r\n5. С помощью оставшейся мясной массы замажьте все неровности и трещины в рулете. Теперь аккуратно перенесите рулет на противень (можно прямо с бумагой) и выпекайте в духовке 70 минут. \r\n6. После выпекания смажьте рулет томатным соусом и украсьте оставшейся моцареллой, натерев ее. Отправьте в духовку еще на 5 минут.	2020-09-04 18:35:32.787+00	recipe_images/leo_sup_qZ5GiMV.jpg	мясной-хлеб	4
+4	Лаваш с начинкой	20	Брынзу натрите на терке в пиалу или глубокую тарелку. Если сыр не соленый, то чуть присолите его. Куриные яйца вбейте в миску, посолите и взбейте в течение 1-2 минут. \r\nЛисты лаваша нарежьте лентами с помощью ножниц. Один лист разрежьте на три ленты. На край ленты выложите часть начинки. \r\nЗаверните треугольником, затем еще раз заверните, чтобы открытые края лаваша, через которые видно начинку, оказались закрытыми. Отрежьте ленту и снова выложите на нее начинку, приготовьте еще одну заготовку. \r\nТаким образом приготовьте все заготовки. \r\nПрогрейте сковороду с растительным маслом на минимальном нагреве, обмакните заготовку в яичную смесь со всех сторон. \r\nВыложите на сковороду. Также поступите и с остальными заготовками. Обжарьте около 1-2 минут с одной стороны. \r\nПереверните на другую сторону и обжарьте до румяности. Нагрев не повышайте, иначе они подгорят, а внутри не пропекутся. \r\nВыложите лаваш с начинкой на тарелку и подайте к столу с чаем или кофе. Блюдо идеально для завтрака или полдника.	2020-09-04 17:37:42.255+00	recipe_images/leo_br_UtwS3TC.jfif	лаваш-с-начинкой	4
+2	Омлет	10	Для того чтобы приготовить вкусный, быстрый и полезный завтрак, необходимо промыть помидоры и нарезать их кружочками. После этого промываем и просушиваем зелень, а затем мелко рубим ее. Сыр необходимо натереть на терке.\r\nЯйца разбиваем в отдельную емкость и смешиваем с молоком и специями. Тщательно взбиваем. На раскаленную сковороду наливаем растительное масло, начинаем тушить помидоры. После добавляем зелень и соль, тщательно перемешивая. Затем добавляем томатный соус и заливаем смесь яичной смесью. Накрываем крышкой и готовим в течение нескольких минут, после чего посыпаем яичницу тертым сыром и зеленью. Готовим в течение 5 минут — и вуаля! Вкусный и полезный завтрак готов, приятного аппетита!	2020-09-04 17:14:12.384+00	recipe_images/ded_su_h1RYaPL.jpg	омлет	2
+8	Рыба жареная	50	Приготовить таким образом можно не только кету, но и форель, лосось - любую красную рыбу. Промоем рыбные стейки, очистим их, если необходимо. \r\nПриготовим маринад. В небольшой мисочке смешиваем соевый соус, сок из целого апельсина, сахар и масло. \r\nЗаливаем рыбные стейки половиной приготовленного маринада и оставляем минут на 15. \r\nРыбу будем запекать в духовке. Форму для запекания можно застелить фольгой. Слегка смажем фольгу маслом и выложим на неё стейки. Ставим их запекаться в разогретую до 200 градусов духовку на 15 минут. Следите за рыбкой, не нужно ее пересушивать! \r\nА теперь займемся салатом. Пока рыба мариновалась, мы уже почистили морковку, да? Натираем морковку на терке или с помощью овощечистки. Пекинскую капусту тонко шинкуем. \r\nЗелень рукколы промоем и подсушим на полотенце, пусть уйдет лишняя влага. Добавим листики рукколы к капусте и морковке. Перемешаем. \r\nРаскладываем салат по тарелкам.\r\nРыбка уже готова, достаем ее из духовки. Выкладываем на салат, солим и перчим. Поливаем оставшимся маринадом, посыпаем кунжутными семечками и подаем к столу.	2020-09-04 18:26:30.725+00	recipe_images/snow_din_pj8nIjI.jpg	рыба-жареная	3
 \.
 
 
@@ -3668,20 +3603,20 @@ COPY public.recipes_recipe (id, title, duration, text, pub_date, image, slug, au
 --
 
 COPY public.recipes_tag (id, title, slug, color, recipe_id) FROM stdin;
-80	Обед	d	green	5
-83	Завтрак	b	orange	2
-84	Обед	d	green	2
-88	Завтрак	b	orange	1
-89	Обед	d	green	1
-90	Ужин	s	purple	1
-93	Обед	d	green	8
-94	Ужин	s	purple	8
-97	Обед	d	green	6
-98	Ужин	s	purple	6
-100	Завтрак	b	orange	3
-102	Ужин	s	purple	9
-104	Обед	d	green	7
-106	Завтрак	b	orange	4
+49	Ужин	s	purple	9
+51	Обед	d	green	7
+53	Завтрак	b	orange	4
+55	Обед	d	green	5
+58	Завтрак	b	orange	2
+59	Обед	d	green	2
+63	Завтрак	b	orange	1
+64	Обед	d	green	1
+65	Ужин	s	purple	1
+68	Обед	d	green	8
+69	Ужин	s	purple	8
+72	Обед	d	green	6
+73	Ужин	s	purple	6
+75	Завтрак	b	orange	3
 \.
 
 
@@ -3690,84 +3625,45 @@ COPY public.recipes_tag (id, title, slug, color, recipe_id) FROM stdin;
 --
 
 COPY public.thumbnail_kvstore (key, value) FROM stdin;
-sorl-thumbnail||image||002ae63a9157a8a2c04b8c39c7713bf4	{"name": "cache/41/c6/41c6b628a831287e55b12b31b85a1079.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||0076b54d5f63153e3d0de20b90e59ee9	{"name": "recipe_images/snow_br.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 394]}
 sorl-thumbnail||image||142df61f5db646a32e70666c3e452340	{"name": "recipe_images/ded_su_NDsl8AO.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 341]}
-sorl-thumbnail||image||1929e543bfe92c943d837d79ab3f2ed8	{"name": "cache/d2/69/d269303379122c7bbfa8f58f43b05c0c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||1dc746ec373cd09c9ccfb84027e0a608	{"name": "recipe_images/snow_br_VB2sy56.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 394]}
-sorl-thumbnail||image||214b07a168d61ce393423e575bee5211	{"name": "cache/c9/5f/c95f4a370feb5d2f37b4a41b8fa81f0c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [770, 500]}
 sorl-thumbnail||image||2b9b3ae7c338672a701703ac06b314c3	{"name": "cache/2c/6b/2c6b01d44d731eb3d11897a8bff0e9d1.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [647, 500]}
-sorl-thumbnail||image||2e10c1521922a27844418f32e353fa14	{"name": "cache/9c/07/9c079f6fe9cb422e5600fd40367ea6de.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [712, 500]}
 sorl-thumbnail||image||4118db626c347082c4bff1bcedaf4ed4	{"name": "cache/6a/55/6a559fd086d2857ca3e2a535ebad630c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||48115317d337472a807a0180f52d8791	{"name": "recipe_images/snow_din_xF8544v.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 469]}
 sorl-thumbnail||image||4a2bdf3491615a23c70af25a24254340	{"name": "cache/29/1c/291c1f1a976774fe25e7d0efdb5175b3.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [751, 500]}
-sorl-thumbnail||image||4c2843928b5d681fc6492df4177af4ef	{"name": "cache/b4/95/b495904ddb9b0de6ba1e1afb1ee1ad9d.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [749, 500]}
-sorl-thumbnail||image||4eda9b1f787a25fb86c7be6d326e0871	{"name": "recipe_images/leo_br.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 404]}
 sorl-thumbnail||image||52308900384144edfde3b233d91252f3	{"name": "recipe_images/snow_din.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 469]}
-sorl-thumbnail||image||57b9dcb38aade2eaa2c9619b52a2f144	{"name": "recipe_images/ded_su.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 341]}
 sorl-thumbnail||image||582a818b0bad9afdbaf4dc028cbe037d	{"name": "cache/19/6b/196b9e1ba4fb6fd02280f176ad5a8e02.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||59823d133a06f896a6bb3b9d151742e2	{"name": "cache/19/f0/19f0ceffa50f4411a7a4f4bb8929a178.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||5c9995c5a9ac05d51a20f3f4d7c70ad9	{"name": "cache/67/f2/67f215ac69030cd74f37a236ca795549.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [770, 500]}
 sorl-thumbnail||image||5ea322f683f468807aba9a91205fee31	{"name": "recipe_images/snow_din_fn2s93t.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 469]}
 sorl-thumbnail||image||65273537647a19745dc536f1fa95d47d	{"name": "recipe_images/leo_sup_bcMyyR1.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 457]}
-sorl-thumbnail||image||751dcc71476ad09ab83dff4b546745b1	{"name": "cache/50/01/5001f11714aa6897f445bc2139f95e7b.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [877, 500]}
-sorl-thumbnail||image||795ae05331eaa230f8dbbc5be88fecda	{"name": "cache/8f/05/8f05c2ecd503892454ec005465736596.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [751, 500]}
-sorl-thumbnail||image||7ef77482e387d23a8c38ce165f07589e	{"name": "recipe_images/leo_sup.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 457]}
 sorl-thumbnail||image||811dca3194337b0236d3e10ec0ba173b	{"name": "recipe_images/ded_din_UptxyQ6.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 538]}
 sorl-thumbnail||image||83b3d55573438da788e7c8b695d79a96	{"name": "cache/fb/12/fb1241b08422190e3b64a7f4995b55c8.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [749, 500]}
 sorl-thumbnail||image||89285663254180f95dd039d0f5a309e9	{"name": "cache/25/69/2569591e30237da36be85915e4089bf1.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||93f469d019273c0f23151e142cb03d9f	{"name": "cache/2b/04/2b04fba38075cce720bb008ff996cef4.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||95c479a4e1fbd030dc6afb7f3d46a707	{"name": "cache/aa/ad/aaada23b09998b53ea6745b446f51892.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||9896572d9df44a82090fc641e39c7c5d	{"name": "cache/94/6f/946fba60e75cc4ea5b41bde8eb5a7bbe.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||a57f4586d3990dc68351d3421f32604f	{"name": "cache/bb/f3/bbf36e4802e7094221cdb947137989db.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [647, 500]}
 sorl-thumbnail||image||ab97dd8dabe66cd906cf3f5ab4cb5fb7	{"name": "recipe_images/leo_din_INjK3go.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 405]}
-sorl-thumbnail||image||b2245e44b03b2f4ba5fa32cc3da06ba8	{"name": "cache/6b/98/6b98f72c1cab4119798e777d2382b183.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||c13c701fdb4d581b7ee8de8d79de6a5e	{"name": "cache/9d/d7/9dd72fba196050fa6514bc611d298a18.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||c154f4f7ff620374e62ca17ac95e0939	{"name": "recipe_images/ded_br.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 370]}
 sorl-thumbnail||image||c36271b3d81e02af720b385f93c54981	{"name": "recipe_images/leo_br_EXLqWjZ.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 404]}
 sorl-thumbnail||image||c3871795e11760c5988408e09d901d9f	{"name": "cache/3e/95/3e959409e293b0a8d4165ab377c4fdc7.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||c5ff62a89e3d7185e0360a89c187fae4	{"name": "cache/70/2c/702cb856b7241ff0940ae3ac5b455dc5.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [820, 500]}
 sorl-thumbnail||image||c93dc545fc4e4d5d7f3a353bb5eae649	{"name": "cache/3f/89/3f89d058eaa8e3ff1c957c11cec019f4.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [712, 500]}
-sorl-thumbnail||image||d03096265e7a24fc759dc1dca14024fa	{"name": "cache/1f/2a/1f2a6463d6d86e254e05286337c3fb3a.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [820, 500]}
-sorl-thumbnail||image||d169cab74e7421fe0aedbc6e5a4ad8ce	{"name": "cache/77/b6/77b601cd60cb209fce097d3734d9c83e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||d36ea08bdc8ca4127433c2376d13143c	{"name": "recipe_images/snow_din_BqJokkp.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 426]}
 sorl-thumbnail||image||d72f36f8b6d37187b5456b9e0010e23e	{"name": "cache/fb/71/fb71562565b852c4bff0a63f41bf2089.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [664, 500]}
-sorl-thumbnail||image||dc701a51aaad2b896446f7e7620b15b6	{"name": "cache/77/76/7776c38b4cb34c86e835954d4c6e9f3e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [664, 500]}
-sorl-thumbnail||image||dd77f19bbfeb9a3e27a7c9176b76f863	{"name": "cache/99/8e/998eb7048e350dfc427129b43208096d.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||dddb07c1a06071838c155204af027dc2	{"name": "cache/a8/3f/a83faf9df9c4a54a671e78f65940cfd3.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||deb8f1fa5cc7f07f6ed12213d1c2ebf5	{"name": "cache/16/6a/166a2967e452cafd2a1aab5edab0bbd1.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [890, 500]}
-sorl-thumbnail||image||dff0565cc92986a9be2f9c57050ffdc1	{"name": "recipe_images/leo_din.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 405]}
-sorl-thumbnail||image||e0c13c0740b74686c15cb5d266b5c165	{"name": "cache/8d/9c/8d9c1e06c00cbacf0730be2b5e627a29.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [564, 500]}
 sorl-thumbnail||image||e1cd9c1daf215bcce9fd15a8982d18ab	{"name": "cache/aa/6e/aa6e12fee4a5c54c597aafb2210f8d92.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [564, 500]}
-sorl-thumbnail||image||e44f0e61def85ee43edfa0a89fdcc39c	{"name": "recipe_images/snow_din.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 426]}
-sorl-thumbnail||image||e50d87173df8a536d56c0ca62d1f04e1	{"name": "recipe_images/war_Pxphoki.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [1102, 628]}
-sorl-thumbnail||image||e94572e31a00663761dbead0c3e77e7e	{"name": "cache/bf/9b/bf9b9f4a4f33278b0cf35eb1655d2b20.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||eca26f92a7b4ae45455c37b2001eff6a	{"name": "cache/d6/34/d634683df712e0d36dbe200a2f1314ad.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||ef827b9dadff39e2c48e4423eb81d652	{"name": "recipe_images/ded_din.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 538]}
-sorl-thumbnail||image||efd90ec5efd6304b89d98fe9401ecb05	{"name": "cache/d9/9b/d99b49e85e03e7c6528a418355f07d56.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
-sorl-thumbnail||image||f2865fde63c88639fe5dcc675696b5fc	{"name": "cache/a8/cf/a8cf6ec9eb7da22a32d8ac0a8804866e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [647, 500]}
 sorl-thumbnail||image||f515c884421d64a87476675d5d95e869	{"name": "cache/72/ea/72eaa055d3776932b5ee26f8936a27ab.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [890, 500]}
-sorl-thumbnail||image||fe82f1f3c14b4ea7f16af1b438077d32	{"name": "cache/4c/a5/4ca5ea8a73c0fd29ea64fa97bf0f6854.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||image||fea802a95cdd93c564a43e6958708f11	{"name": "recipe_images/ded_br_QTsmGQw.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 370]}
-sorl-thumbnail||thumbnails||0076b54d5f63153e3d0de20b90e59ee9	["214b07a168d61ce393423e575bee5211", "e94572e31a00663761dbead0c3e77e7e"]
 sorl-thumbnail||thumbnails||142df61f5db646a32e70666c3e452340	["4118db626c347082c4bff1bcedaf4ed4", "f515c884421d64a87476675d5d95e869"]
 sorl-thumbnail||thumbnails||1dc746ec373cd09c9ccfb84027e0a608	["582a818b0bad9afdbaf4dc028cbe037d", "5c9995c5a9ac05d51a20f3f4d7c70ad9"]
-sorl-thumbnail||thumbnails||48115317d337472a807a0180f52d8791	["d169cab74e7421fe0aedbc6e5a4ad8ce", "f2865fde63c88639fe5dcc675696b5fc"]
-sorl-thumbnail||thumbnails||4eda9b1f787a25fb86c7be6d326e0871	["95c479a4e1fbd030dc6afb7f3d46a707", "795ae05331eaa230f8dbbc5be88fecda"]
 sorl-thumbnail||thumbnails||52308900384144edfde3b233d91252f3	["2b9b3ae7c338672a701703ac06b314c3"]
-sorl-thumbnail||thumbnails||57b9dcb38aade2eaa2c9619b52a2f144	["efd90ec5efd6304b89d98fe9401ecb05", "deb8f1fa5cc7f07f6ed12213d1c2ebf5"]
 sorl-thumbnail||thumbnails||5ea322f683f468807aba9a91205fee31	["c3871795e11760c5988408e09d901d9f", "a57f4586d3990dc68351d3421f32604f"]
 sorl-thumbnail||thumbnails||65273537647a19745dc536f1fa95d47d	["59823d133a06f896a6bb3b9d151742e2", "d72f36f8b6d37187b5456b9e0010e23e"]
-sorl-thumbnail||thumbnails||7ef77482e387d23a8c38ce165f07589e	["1929e543bfe92c943d837d79ab3f2ed8", "dc701a51aaad2b896446f7e7620b15b6"]
 sorl-thumbnail||thumbnails||811dca3194337b0236d3e10ec0ba173b	["dddb07c1a06071838c155204af027dc2", "e1cd9c1daf215bcce9fd15a8982d18ab"]
 sorl-thumbnail||thumbnails||ab97dd8dabe66cd906cf3f5ab4cb5fb7	["89285663254180f95dd039d0f5a309e9", "83b3d55573438da788e7c8b695d79a96"]
-sorl-thumbnail||thumbnails||c154f4f7ff620374e62ca17ac95e0939	["002ae63a9157a8a2c04b8c39c7713bf4", "d03096265e7a24fc759dc1dca14024fa"]
 sorl-thumbnail||thumbnails||c36271b3d81e02af720b385f93c54981	["c13c701fdb4d581b7ee8de8d79de6a5e", "4a2bdf3491615a23c70af25a24254340"]
 sorl-thumbnail||thumbnails||d36ea08bdc8ca4127433c2376d13143c	["c93dc545fc4e4d5d7f3a353bb5eae649", "9896572d9df44a82090fc641e39c7c5d"]
-sorl-thumbnail||thumbnails||dff0565cc92986a9be2f9c57050ffdc1	["4c2843928b5d681fc6492df4177af4ef", "eca26f92a7b4ae45455c37b2001eff6a"]
-sorl-thumbnail||thumbnails||e44f0e61def85ee43edfa0a89fdcc39c	["2e10c1521922a27844418f32e353fa14", "fe82f1f3c14b4ea7f16af1b438077d32"]
-sorl-thumbnail||thumbnails||e50d87173df8a536d56c0ca62d1f04e1	["751dcc71476ad09ab83dff4b546745b1", "dd77f19bbfeb9a3e27a7c9176b76f863"]
-sorl-thumbnail||thumbnails||ef827b9dadff39e2c48e4423eb81d652	["b2245e44b03b2f4ba5fa32cc3da06ba8", "e0c13c0740b74686c15cb5d266b5c165"]
 sorl-thumbnail||thumbnails||fea802a95cdd93c564a43e6958708f11	["93f469d019273c0f23151e142cb03d9f", "c5ff62a89e3d7185e0360a89c187fae4"]
 sorl-thumbnail||image||0391ade44f3a0cf6a84a324be31a48b3	{"name": "recipe_images/ded_din_uaBSuJS.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 538]}
 sorl-thumbnail||image||fafe78de51263f70666fbd77e8ab7250	{"name": "cache/b7/32/b732eab308233cf40a572b8da0551b2e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [564, 500]}
@@ -3805,6 +3701,81 @@ sorl-thumbnail||image||05e9f025c3595e82606564cc3e22fe55	{"name": "recipe_images/
 sorl-thumbnail||image||1174b12b466c36aaa25b27602f63b383	{"name": "cache/73/55/7355738abb93d63c9a59cc7794f55a2c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [751, 500]}
 sorl-thumbnail||image||201fd0e9733ca111e949cda78ae49af5	{"name": "cache/11/dc/11dc84431a8e0dd433166d076f060f3a.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
 sorl-thumbnail||thumbnails||05e9f025c3595e82606564cc3e22fe55	["201fd0e9733ca111e949cda78ae49af5", "1174b12b466c36aaa25b27602f63b383"]
+sorl-thumbnail||image||002ae63a9157a8a2c04b8c39c7713bf4	{"name": "cache/41/c6/41c6b628a831287e55b12b31b85a1079.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||0076b54d5f63153e3d0de20b90e59ee9	{"name": "recipe_images/snow_br.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 394]}
+sorl-thumbnail||image||1929e543bfe92c943d837d79ab3f2ed8	{"name": "cache/d2/69/d269303379122c7bbfa8f58f43b05c0c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||214b07a168d61ce393423e575bee5211	{"name": "cache/c9/5f/c95f4a370feb5d2f37b4a41b8fa81f0c.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [770, 500]}
+sorl-thumbnail||image||2e10c1521922a27844418f32e353fa14	{"name": "cache/9c/07/9c079f6fe9cb422e5600fd40367ea6de.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [712, 500]}
+sorl-thumbnail||image||48115317d337472a807a0180f52d8791	{"name": "recipe_images/snow_din_xF8544v.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 469]}
+sorl-thumbnail||image||4c2843928b5d681fc6492df4177af4ef	{"name": "cache/b4/95/b495904ddb9b0de6ba1e1afb1ee1ad9d.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [749, 500]}
+sorl-thumbnail||image||4eda9b1f787a25fb86c7be6d326e0871	{"name": "recipe_images/leo_br.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 404]}
+sorl-thumbnail||image||57b9dcb38aade2eaa2c9619b52a2f144	{"name": "recipe_images/ded_su.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 341]}
+sorl-thumbnail||image||751dcc71476ad09ab83dff4b546745b1	{"name": "cache/50/01/5001f11714aa6897f445bc2139f95e7b.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [877, 500]}
+sorl-thumbnail||image||795ae05331eaa230f8dbbc5be88fecda	{"name": "cache/8f/05/8f05c2ecd503892454ec005465736596.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [751, 500]}
+sorl-thumbnail||image||7ef77482e387d23a8c38ce165f07589e	{"name": "recipe_images/leo_sup.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 457]}
+sorl-thumbnail||image||95c479a4e1fbd030dc6afb7f3d46a707	{"name": "cache/aa/ad/aaada23b09998b53ea6745b446f51892.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||b2245e44b03b2f4ba5fa32cc3da06ba8	{"name": "cache/6b/98/6b98f72c1cab4119798e777d2382b183.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||c154f4f7ff620374e62ca17ac95e0939	{"name": "recipe_images/ded_br.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 370]}
+sorl-thumbnail||image||d03096265e7a24fc759dc1dca14024fa	{"name": "cache/1f/2a/1f2a6463d6d86e254e05286337c3fb3a.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [820, 500]}
+sorl-thumbnail||image||d169cab74e7421fe0aedbc6e5a4ad8ce	{"name": "cache/77/b6/77b601cd60cb209fce097d3734d9c83e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||dc701a51aaad2b896446f7e7620b15b6	{"name": "cache/77/76/7776c38b4cb34c86e835954d4c6e9f3e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [664, 500]}
+sorl-thumbnail||image||dd77f19bbfeb9a3e27a7c9176b76f863	{"name": "cache/99/8e/998eb7048e350dfc427129b43208096d.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||dff0565cc92986a9be2f9c57050ffdc1	{"name": "recipe_images/leo_din.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 405]}
+sorl-thumbnail||image||e0c13c0740b74686c15cb5d266b5c165	{"name": "cache/8d/9c/8d9c1e06c00cbacf0730be2b5e627a29.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [564, 500]}
+sorl-thumbnail||image||e44f0e61def85ee43edfa0a89fdcc39c	{"name": "recipe_images/snow_din.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 426]}
+sorl-thumbnail||image||e50d87173df8a536d56c0ca62d1f04e1	{"name": "recipe_images/war_Pxphoki.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [1102, 628]}
+sorl-thumbnail||image||e94572e31a00663761dbead0c3e77e7e	{"name": "cache/bf/9b/bf9b9f4a4f33278b0cf35eb1655d2b20.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||eca26f92a7b4ae45455c37b2001eff6a	{"name": "cache/d6/34/d634683df712e0d36dbe200a2f1314ad.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||ef827b9dadff39e2c48e4423eb81d652	{"name": "recipe_images/ded_din.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 538]}
+sorl-thumbnail||image||efd90ec5efd6304b89d98fe9401ecb05	{"name": "cache/d9/9b/d99b49e85e03e7c6528a418355f07d56.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||image||f2865fde63c88639fe5dcc675696b5fc	{"name": "cache/a8/cf/a8cf6ec9eb7da22a32d8ac0a8804866e.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [647, 500]}
+sorl-thumbnail||image||fe82f1f3c14b4ea7f16af1b438077d32	{"name": "cache/4c/a5/4ca5ea8a73c0fd29ea64fa97bf0f6854.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||0076b54d5f63153e3d0de20b90e59ee9	["214b07a168d61ce393423e575bee5211", "e94572e31a00663761dbead0c3e77e7e"]
+sorl-thumbnail||thumbnails||48115317d337472a807a0180f52d8791	["d169cab74e7421fe0aedbc6e5a4ad8ce", "f2865fde63c88639fe5dcc675696b5fc"]
+sorl-thumbnail||thumbnails||4eda9b1f787a25fb86c7be6d326e0871	["95c479a4e1fbd030dc6afb7f3d46a707", "795ae05331eaa230f8dbbc5be88fecda"]
+sorl-thumbnail||thumbnails||57b9dcb38aade2eaa2c9619b52a2f144	["efd90ec5efd6304b89d98fe9401ecb05"]
+sorl-thumbnail||thumbnails||7ef77482e387d23a8c38ce165f07589e	["1929e543bfe92c943d837d79ab3f2ed8", "dc701a51aaad2b896446f7e7620b15b6"]
+sorl-thumbnail||thumbnails||c154f4f7ff620374e62ca17ac95e0939	["002ae63a9157a8a2c04b8c39c7713bf4", "d03096265e7a24fc759dc1dca14024fa"]
+sorl-thumbnail||thumbnails||dff0565cc92986a9be2f9c57050ffdc1	["4c2843928b5d681fc6492df4177af4ef", "eca26f92a7b4ae45455c37b2001eff6a"]
+sorl-thumbnail||thumbnails||e44f0e61def85ee43edfa0a89fdcc39c	["2e10c1521922a27844418f32e353fa14", "fe82f1f3c14b4ea7f16af1b438077d32"]
+sorl-thumbnail||thumbnails||e50d87173df8a536d56c0ca62d1f04e1	["751dcc71476ad09ab83dff4b546745b1", "dd77f19bbfeb9a3e27a7c9176b76f863"]
+sorl-thumbnail||thumbnails||ef827b9dadff39e2c48e4423eb81d652	["b2245e44b03b2f4ba5fa32cc3da06ba8", "e0c13c0740b74686c15cb5d266b5c165"]
+sorl-thumbnail||image||98c1a20bc47670dc178eca18eea8cc8c	{"name": "recipe_images/leo_sup_qZ5GiMV.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 457]}
+sorl-thumbnail||image||7e579312f4c0e8052a7b787dd72f4bc1	{"name": "cache/a3/be/a3be5aca9a4a6960cd92114ff74ea720.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [664, 500]}
+sorl-thumbnail||image||576108dda2e35ad0c8917f35124beda8	{"name": "cache/44/6e/446e96e51d9f1fa0287c7434f59c7136.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||98c1a20bc47670dc178eca18eea8cc8c	["7e579312f4c0e8052a7b787dd72f4bc1", "576108dda2e35ad0c8917f35124beda8"]
+sorl-thumbnail||image||c042ab5e7f393ffdd7a34dadf130ef0a	{"name": "recipe_images/leo_din_MGIeVIk.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 405]}
+sorl-thumbnail||image||d60f0f23d8d658454e1b3898861bde89	{"name": "cache/27/8f/278f0785a08f236c3c44fa0b04efe515.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [749, 500]}
+sorl-thumbnail||image||a7a8de3ac84f3c0807d223a85ac3b346	{"name": "cache/ce/b6/ceb60e11cc33a73397bd40fd37462086.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||c042ab5e7f393ffdd7a34dadf130ef0a	["a7a8de3ac84f3c0807d223a85ac3b346", "d60f0f23d8d658454e1b3898861bde89"]
+sorl-thumbnail||image||7605caca2d500257c76e6cbce0d733c4	{"name": "recipe_images/leo_br_UtwS3TC.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 404]}
+sorl-thumbnail||image||ec837989e8c69fcd84013f38b997ed9d	{"name": "cache/7c/00/7c003b738914811cf0a808a6fccbfb5a.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [751, 500]}
+sorl-thumbnail||image||5544c3512104384e9f8f3ebee4411167	{"name": "cache/11/b2/11b2c6b68d10f0fc05d72279031e2707.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||7605caca2d500257c76e6cbce0d733c4	["ec837989e8c69fcd84013f38b997ed9d", "5544c3512104384e9f8f3ebee4411167"]
+sorl-thumbnail||image||a8f023ca6a7b4b082df571dd7b55d35b	{"name": "recipe_images/ded_din_TEYdnIZ.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 538]}
+sorl-thumbnail||image||d215749f4a7be2e0963669b061805107	{"name": "cache/07/b3/07b327839abc90eda4d5a2a2403f2786.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [564, 500]}
+sorl-thumbnail||image||706757cca7e5e63c91d42dff7940788b	{"name": "cache/8a/13/8a13d2a530e234da51bc0d00fa57f71d.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||a8f023ca6a7b4b082df571dd7b55d35b	["706757cca7e5e63c91d42dff7940788b", "d215749f4a7be2e0963669b061805107"]
+sorl-thumbnail||image||857f50eceafd226e5a5188db701e1945	{"name": "recipe_images/ded_su_h1RYaPL.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 341]}
+sorl-thumbnail||image||e4bf90c964c6fb38c874e4e20ed7c586	{"name": "cache/83/28/8328a4ec2bd48f48299c2c03cc69d799.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [890, 500]}
+sorl-thumbnail||image||2f9ba058182b55c70f88d05e3c959092	{"name": "cache/84/c3/84c3556b6f55df2277b6100ac7643053.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||857f50eceafd226e5a5188db701e1945	["e4bf90c964c6fb38c874e4e20ed7c586", "2f9ba058182b55c70f88d05e3c959092"]
+sorl-thumbnail||image||1793b2bf7317306b1a99654aa1d95f78	{"name": "recipe_images/ded_br_DqsmoGo.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 370]}
+sorl-thumbnail||image||902d79db602070d14d55d6d4406defa4	{"name": "cache/e0/66/e066459acaafabd21895e6bbdf557428.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [820, 500]}
+sorl-thumbnail||image||1e4265a957eae1e0a7cbc02f8d24baee	{"name": "recipe_images/snow_din_pj8nIjI.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 469]}
+sorl-thumbnail||image||441821ed246eeacc7ad4534ae568b701	{"name": "cache/47/e9/47e9de701cdd9dbaf8cf7ecf05b7b8c4.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [647, 500]}
+sorl-thumbnail||image||0c061e9eb4eee90a7adc90a63d6f7f8c	{"name": "cache/93/a8/93a8e70a2f21b7e5cdadd3eb3c23ec4b.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||1e4265a957eae1e0a7cbc02f8d24baee	["441821ed246eeacc7ad4534ae568b701", "0c061e9eb4eee90a7adc90a63d6f7f8c"]
+sorl-thumbnail||image||969c9dd01c6365f4b3a3e48e656bb9db	{"name": "recipe_images/snow_din_07Avaiz.jfif", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 426]}
+sorl-thumbnail||image||0c74a01758c8ae920ea9c0c8287ec041	{"name": "cache/ef/f8/eff80467b386bae5db89d1155f7f52e6.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [712, 500]}
+sorl-thumbnail||image||48b6089c15e0aa84648d384dc8e87172	{"name": "cache/5b/06/5b0659165a0bfa0f407b2e442a9ab6f2.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||969c9dd01c6365f4b3a3e48e656bb9db	["0c74a01758c8ae920ea9c0c8287ec041", "48b6089c15e0aa84648d384dc8e87172"]
+sorl-thumbnail||image||0a9e0b98251ce19613a412ef59464638	{"name": "cache/dc/36/dc367a5c4e74657b249f3596987d3b13.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||1793b2bf7317306b1a99654aa1d95f78	["0a9e0b98251ce19613a412ef59464638", "902d79db602070d14d55d6d4406defa4"]
+sorl-thumbnail||image||a79088c87846f5cd249634b2bc93dcd1	{"name": "recipe_images/snow_br_Uo2eF5f.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [607, 394]}
+sorl-thumbnail||image||4ff2acf5666942cff310b4c401a2d261	{"name": "cache/3a/07/3a07746a62d32d577c851cdd75d6ecda.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [770, 500]}
+sorl-thumbnail||image||0f0d6712eeeed33b3bce78ad97b3e8d3	{"name": "cache/0b/ae/0bae257d108b5509d047e12d394b1b41.jpg", "storage": "django.core.files.storage.FileSystemStorage", "size": [960, 500]}
+sorl-thumbnail||thumbnails||a79088c87846f5cd249634b2bc93dcd1	["4ff2acf5666942cff310b4c401a2d261", "0f0d6712eeeed33b3bce78ad97b3e8d3"]
 \.
 
 
@@ -3814,9 +3785,9 @@ sorl-thumbnail||thumbnails||05e9f025c3595e82606564cc3e22fe55	["201fd0e9733ca111e
 
 COPY public.users_user (id, password, last_login, is_superuser, username, first_name, last_name, is_staff, is_active, date_joined, email) FROM stdin;
 1	pbkdf2_sha256$216000$zWlQsefWBsYT$p7t8YZCN/Y9P/SilJrVPrF3kqhYp/xE5AXse1y6xwIk=	2020-09-18 09:25:18.442+00	t	yadmin	Админ	Добрый	t	t	2020-09-04 15:17:10+00	ya@mail.ru
-2	pbkdf2_sha256$216000$BHmh4ViJQwlT$PSvV7gJqEMdJFsRi7yDJQjlA7lZpKbxjZ1KYwYxA3AI=	2020-09-30 21:07:48.964618+00	f	DedMoroz	Дед	Мороз	t	t	2020-09-04 15:23:51+00	moroz@mail.ru
-3	pbkdf2_sha256$216000$Vu3C8JRwzFcL$6olYZdsdj3Ikb6566oLWOT9sHDnB+DDfDWEqzfwvGpo=	2020-09-30 21:10:14.19084+00	f	Snegurochka	Марья	Снежная	f	t	2020-09-04 15:25:32+00	snow@mail.ru
-4	pbkdf2_sha256$216000$PTRRbpa06igB$XTgPYlbt/mo982xYmmoGBaRw5gtNGzkkK/AMxGv5kmo=	2020-09-30 21:11:57.012953+00	f	KotLeopold	Кот	Леопольд	f	t	2020-09-04 15:26:31+00	usatyy@mail.ru
+4	pbkdf2_sha256$216000$PTRRbpa06igB$XTgPYlbt/mo982xYmmoGBaRw5gtNGzkkK/AMxGv5kmo=	2020-10-01 08:14:24.261202+00	f	KotLeopold	Кот	Леопольд	f	t	2020-09-04 15:26:31+00	usatyy@mail.ru
+2	pbkdf2_sha256$216000$BHmh4ViJQwlT$PSvV7gJqEMdJFsRi7yDJQjlA7lZpKbxjZ1KYwYxA3AI=	2020-10-01 08:16:10.047667+00	f	DedMoroz	Дед	Мороз	t	t	2020-09-04 15:23:51+00	moroz@mail.ru
+3	pbkdf2_sha256$216000$Vu3C8JRwzFcL$6olYZdsdj3Ikb6566oLWOT9sHDnB+DDfDWEqzfwvGpo=	2020-10-01 08:17:35.449925+00	f	Snegurochka	Марья	Снежная	f	t	2020-09-04 15:25:32+00	snow@mail.ru
 \.
 
 
@@ -3847,14 +3818,14 @@ SELECT pg_catalog.setval('public.api_favorite_id_seq', 40, true);
 -- Name: api_purchase_id_seq; Type: SEQUENCE SET; Schema: public; Owner: foodgram
 --
 
-SELECT pg_catalog.setval('public.api_purchase_id_seq', 65, true);
+SELECT pg_catalog.setval('public.api_purchase_id_seq', 63, true);
 
 
 --
 -- Name: api_subscribe_id_seq; Type: SEQUENCE SET; Schema: public; Owner: foodgram
 --
 
-SELECT pg_catalog.setval('public.api_subscribe_id_seq', 79, true);
+SELECT pg_catalog.setval('public.api_subscribe_id_seq', 78, true);
 
 
 --
@@ -3875,7 +3846,7 @@ SELECT pg_catalog.setval('public.auth_group_permissions_id_seq', 1, false);
 -- Name: auth_permission_id_seq; Type: SEQUENCE SET; Schema: public; Owner: foodgram
 --
 
-SELECT pg_catalog.setval('public.auth_permission_id_seq', 128, true);
+SELECT pg_catalog.setval('public.auth_permission_id_seq', 64, true);
 
 
 --
@@ -3931,7 +3902,7 @@ SELECT pg_catalog.setval('public.recipes_ingredient_id_seq', 2192, true);
 -- Name: recipes_ingredientamount_id_seq; Type: SEQUENCE SET; Schema: public; Owner: foodgram
 --
 
-SELECT pg_catalog.setval('public.recipes_ingredientamount_id_seq', 335, true);
+SELECT pg_catalog.setval('public.recipes_ingredientamount_id_seq', 235, true);
 
 
 --
@@ -3945,7 +3916,7 @@ SELECT pg_catalog.setval('public.recipes_recipe_id_seq', 9, true);
 -- Name: recipes_tag_id_seq; Type: SEQUENCE SET; Schema: public; Owner: foodgram
 --
 
-SELECT pg_catalog.setval('public.recipes_tag_id_seq', 106, true);
+SELECT pg_catalog.setval('public.recipes_tag_id_seq', 75, true);
 
 
 --
