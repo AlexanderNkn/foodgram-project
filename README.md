@@ -17,15 +17,15 @@
     ```
 - запустите docker-compose
     ```
-    docker-compose -f docker-compose.yandex.yaml up -d
+    docker-compose -f docker-compose.prod.yaml up -d
     ```
 
 ### Дополнительные возможности
 - заполнить базу тестовыми данными
     ```
-    docker-compose run --rm web python manage.py loaddata fixtures.json
+    docker-compose -f docker-compose.prod.yaml run --rm web python manage.py loaddata fixtures.json
     ```
 - создать суперпользователя
     ```
-    docker-compose run --rm web python manage.py createsuperuser
+    docker-compose -f docker-compose.prod.yaml run --rm web python manage.py createsuperuser
     ```
