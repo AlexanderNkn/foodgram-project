@@ -150,3 +150,6 @@ ya_cloud
 .env.prod
 .env.prod.db
 .env.dev
+
+#backups 
+backups/

@@ -11,6 +11,8 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 """
 import os
 from pathlib import Path
+import sentry_sdk
+from sentry_sdk.integrations.django import DjangoIntegration
 
 import environ
 
@@ -160,3 +162,11 @@ LOGIN_REDIRECT_URL = 'index'
 
 # for flatpages
 SITE_ID = 1
+
+# sentry
+sentry_sdk.init(
+    dsn="https://041ca0d0bb19434798ed9671ea89e6bf@o427295.ingest.sentry.io/5608222",
+    integrations=[DjangoIntegration()],
+    traces_sample_rate=1.0,
+    send_default_pii=True
+)

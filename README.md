@@ -17,7 +17,7 @@
     ```
 - запустите docker-compose
     ```
-    docker-compose -f docker-compose.yandex.yaml up -d
+    docker-compose -f docker-compose.dev.yaml up -d
     ```
 
 ### Дополнительные возможности
