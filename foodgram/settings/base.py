@@ -165,7 +165,7 @@ SITE_ID = 1
 
 # sentry
 sentry_sdk.init(
-    dsn="https://041ca0d0bb19434798ed9671ea89e6bf@o427295.ingest.sentry.io/5608222",  #noqa
+    dsn="https://041ca0d0bb19434798ed9671ea89e6bf@o427295.ingest.sentry.io/5608222",  # noqa
     integrations=[DjangoIntegration()],
     traces_sample_rate=1.0,
     send_default_pii=True
