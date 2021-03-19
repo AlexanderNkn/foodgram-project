@@ -1,7 +1,7 @@
 Django==3.1.1
 django-environ==0.4.5
 sorl-thumbnail==12.6.3
-Pillow==7.2.0
+Pillow==8.1.1
 djangorestframework==3.11.1
 asgiref==3.2.10
 djangorestframework-simplejwt==4.4.0
